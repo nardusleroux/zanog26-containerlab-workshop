@@ -24,7 +24,7 @@ ssh -J user@<example.com:2222> user@<vmID>
 >     User user
 >     ProxyJump jump-host
 >```
-> This allows to access your VM with `ssh user@<vmID>.<example.com> 
+> This allows to access your VM with `ssh user@<vmID>.<example.com>`
 
 
 A Visual Studio Code web interface running on HTTPS port 8443. Optionally use your own VS Code installation on your laptop, to connect remotely to the instance.
