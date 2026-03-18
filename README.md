@@ -131,14 +131,14 @@ In this workshop, we will use two freely downloadable NOSes that do not require 
 
 To get started, we will create a simple topology called `zanog26-workshop` consisting of 2 nodes with a single link in between them.
 
-`leaf1` will be an SR Linux node, running SR Linux 25.10, and `leaf2` will be VPP, running the v25.10.0, using the container image `git.ipng.ch/ipng/vpp-containerlab:v25.10.0`!
+`leaf1` will be an SR Linux node, running SR Linux 25.10, and `leaf2` will be VPP, running the latest version, using the container image `git.ipng.ch/ipng/vpp-containerlab:latest`
 
 To make things simple, we will use the first available data-plane interface for both nodes:  
 in case of SR Linux, this is `ethernet-1/1`, and `eth1` for VPP.
 
 ![Topology](images/2.topology.png)
 
-Armed with this topology diagram and the [Containerlab topology format definition](https://containerlab.dev/manual/topo-def-file/#topology-definition-components), you should be able to write your first Containerlab topology in the file `zanog26-workshop.clab.yaml`!
+Based on the topology diagram and the [Containerlab topology format definition](https://containerlab.dev/manual/topo-def-file/#topology-definition-components), you should be able to define your first Containerlab topology in the file `zanog26-workshop.clab.yaml`
 
 If you are already familiar with the Containerlab basics and want to skip over this exercise, you'll find the solution right here:
 
@@ -155,7 +155,7 @@ topology:
       image: ghcr.io/nokia/srlinux:25.10
     leaf2:
       kind: linux
-      image: git.ipng.ch/ipng/vpp-containerlab:v25.10.0
+      image: git.ipng.ch/ipng/vpp-containerlab:latest
 
   links:
     - endpoints: ["leaf1:ethernet-1/1", "leaf2:eth1"]
@@ -166,8 +166,140 @@ topology:
 **What did we learn ?**
 - How to define your own topology.
 
-
 ## 3. Running & configuring your lab
+
+#### Task 3.1 - Deploying the topology
+Next step would be to deploy the lab and start with network configuration.
+
+First deploy the lab using the `containerlab deploy` command.
+
+> [!TIP]
+> If your topology file has the .clab.yml postfix, `containerlab deploy` or `clab deploy` is sufficient to deploy the topology. You can also specifiy the topology file to use by using the `containerlab deploy -t <topologyfile.yml>`
+
+During the deploy process, Containerlab will automatically download the necessary container images if they are not already present on the VM.
+
+Once the nodes have started, Containerlab will give us an overview like this:
+```
+╭─────────────────────────────┬──────────────────────────────────────────┬─────────┬───────────────────╮
+│             Name            │                Kind/Image                │  State  │   IPv4/6 Address  │
+├─────────────────────────────┼──────────────────────────────────────────┼─────────┼───────────────────┤
+│ clab-zanog26-workshop-leaf1 │ nokia_srlinux                            │ running │ 172.20.20.5       │
+│                             │ ghcr.io/nokia/srlinux:25.10              │         │ 3fff:172:20:20::5 │
+├─────────────────────────────┼──────────────────────────────────────────┼─────────┼───────────────────┤
+│ clab-zanog26-workshop-leaf2 │ linux                                    │ running │ 172.20.20.4       │
+│                             │ git.ipng.ch/ipng/vpp-containerlab:latest │         │ 3fff:172:20:20::4 │
+╰─────────────────────────────┴──────────────────────────────────────────┴─────────┴───────────────────╯
+```
+The nodes are automatically assigned a management IPv4 and IPv6 address by Containerlab, this can also be set statically in the topology file. Containerlab will also populate the hosts file to use the Name of the node to connect.
+
+> [!Note]
+>
+> Given that most network OSes require additional configuration to be remotely manageable, Containerlab > loads them with an initial configuration, just enough to give them a hostname, management connectivity > and fixed credentials to SSH in with.
+>
+> Some node kinds go a bit further than that - Containerlab will automatically load SSH public keys, pre-configure node hardware configuration, as a convenience feature.
+
+For most nodes, connecting to a node is just an ssh session to the node's name.
+
+> [!Tip]
+>
+> The default username and password configured for SR Linux deployed via Containerlab is `admin` and `NokiaSrl1!`
+> You can find out what default password is assigned to each node kind on the kind's documentation page in the Containerlab Kinds documentation page.
+
+```
+user@vm1:~/zanog26-workshop$ ssh admin@clab-zanog26-workshop-leaf1
+Warning: Permanently added 'clab-zanog26-workshop-leaf1' (ED25519) to the list of known hosts.
+................................................................
+:                  Welcome to Nokia SR Linux!                  :
+:              Open Network OS for the NetOps era.             :
+:                                                              :
+:    This is a freely distributed official container image.    :
+:                      Use it - Share it                       :
+:                                                              :
+: Get started: https://learn.srlinux.dev                       :
+: Container:   https://go.srlinux.dev/container-image          :
+: Docs:        https://doc.srlinux.dev/25-10                   :
+: Rel. notes:  https://doc.srlinux.dev/rn25-10-2               :
+: YANG:        https://yang.srlinux.dev/v25.10.2               :
+: Discord:     https://go.srlinux.dev/discord                  :
+: Contact:     https://go.srlinux.dev/contact-sales            :
+................................................................
+
+(admin@clab-zanog26-workshop-leaf1) Password:
+Last login: Wed Mar 18 11:51:23 2026 from 3fff:172:20:20::1
+Loading environment configuration file(s): ['/etc/opt/srlinux/srlinux.rc']
+Welcome to the Nokia SR Linux CLI.
+
+--{ running }--[  ]--
+A:admin@leaf1#
+```
+
+Verify connectivity to leaf2 as well.
+
+> [!Tip]
+>
+> The default username and password configured for VPP deployed via Containerlab is `root` and `vpp`
+
+```
+user@vm1:~/zanog26-workshop$ ssh root@clab-zanog26-workshop-leaf2 
+Warning: Permanently added 'clab-zanog26-workshop-leaf2' (ED25519) to the list of known hosts.
+root@clab-zanog26-workshop-leaf2's password: 
+Welcome to Ubuntu 24.04.4 LTS (GNU/Linux 6.12.73+deb13-cloud-amd64 x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+This system has been minimized by removing packages and content that are
+not required on a system that users do not log into.
+
+To restore this content, you can run the 'unminimize' command.
+Last login: Wed Mar 18 11:52:57 2026 from 3fff:172:20:20::1
+root@leaf2:~# vppctl
+    _______    _        _   _____  ___ 
+ __/ __/ _ \  (_)__    | | / / _ \/ _ \
+ _/ _// // / / / _ \   | |/ / ___/ ___/
+ /_/ /____(_)_/\___/   |___/_/  /_/    
+
+vpp-clab 
+```
+
+
+#### Task 3.2 - Adding configuration to your topology
+Repeat the ping test we did in the "hello-world" lab between leaf1 and leaf2. Configure 10.0.0.1/24 and 10.0.0.2/24 on leaf1 and leaf2 respectively, and perform a ping test.
+
+XXXX
+
+Links to relevant documentations:
+
+FRR
+SR Linux
+Tip
+
+SR Linux Hints
+
+Navigating the CLI
+Configuring an interface
+Assigning an interface to a network-instance
+Managing the configuration
+Tip
+
+FRR tips
+✅ Task 1.4 Solution
+
+leaf1 SR Linux configuration
+leaf2 FRR configuration
+Validation
+--{ running }--[  ]--
+A:leaf1# ping 10.0.0.2 network-instance default
+Using network instance default
+PING 10.0.0.2 (10.0.0.2) 56(84) bytes of data.
+64 bytes from 10.0.0.2: icmp_seq=1 ttl=64 time=51.4 ms
+64 bytes from 10.0.0.2: icmp_seq=2 ttl=64 time=2.17 ms
+64 bytes from 10.0.0.2: icmp_seq=3 ttl=64 time=2.15 ms
+^CCommand execution aborted : 'ping 10.0.0.2 network-instance default '
+
+--{ running }--[  ]--
+
 
 ## 4. Adding startup configuration
 
