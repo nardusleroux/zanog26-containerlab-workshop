@@ -106,7 +106,66 @@ GitHub repositories, direct URLs to Containerlab topologies, even S3 links work.
 - `docker exec` can be used to run commands on containers deployed by Containerlab.
 This is one of the two main methods (ssh being the other) for interacting with a node in a running Containerlab topology.
 
-## 2. Creating your first containerlab topology
+## 2. Creating and running your first Containerlab topology
+A valid Containerlab topology consist of a name, and a set of nodes and links between them.
+
+#### Important terminology
+
+The most important objects within a Containerlab topology definition are:
+
+- [Nodes](https://containerlab.dev/manual/nodes/#nodes)
+Node object is one of the pillars of Containerlab. Within the `nodes` section of a Containerlab topology definition the actual containers that should be deployed are described. In most cases, each node represents a single container. This could be a network element (router, switch, firewall, etc), but can also be any other Linux-based container.
+- [Links](https://containerlab.dev/manual/topo-def-file/#links)
+Nodes can be deployed without links, but to create a network topology you would want them. In the `links` section, we can define links by providing pairs of `endpoints` for Containerlab to connect. An endpoint consist of a `node` and an interface of the node.
+
+A [topology definition deep-dive document](https://containerlab.dev/manual/topo-def-file/) provides a complete reference of the topology definition syntax.
+
+#### Task 2.1 - Your first lab topology
+
+Containerlab supports [over 50 different types of Network OSes](https://containerlab.dev/manual/kinds/) that can be ran inside a topology. However, most commercial NOSes can only be downloaded with an active account for a given vendor's website or download portal.
+
+In this workshop, we will use two freely downloadable NOSes that do not require any registration:
+
+- [FD.io VPP](https://fd.io/)
+- [Nokia SR Linux](https://learn.srlinux.dev/)
+
+To get started, we will create a simple topology called `zanog26-workshop` consisting of 2 nodes with a single link in between them.
+
+`leaf1` will be an SR Linux node, running SR Linux 25.10, and `leaf2` will be VPP, running the v25.10.0, using the container image `git.ipng.ch/ipng/vpp-containerlab:v25.10.0`!
+
+To make things simple, we will use the first available data-plane interface for both nodes:  
+in case of SR Linux, this is `ethernet-1/1`, and `eth1` for VPP.
+
+![Topology](images/2.topology.png)
+
+Armed with this topology diagram and the [Containerlab topology format definition](https://containerlab.dev/manual/topo-def-file/#topology-definition-components), you should be able to write your first Containerlab topology in the file `zanog26-workshop.clab.yaml`!
+
+If you are already familiar with the Containerlab basics and want to skip over this exercise, you'll find the solution right here:
+
+<details>
+<summary>Task 2.1 solution</summary>
+
+```yaml
+name: zanog26-workshop
+
+topology:
+  nodes:
+    leaf1:
+      kind: nokia_srlinux
+      image: ghcr.io/nokia/srlinux:25.10
+    leaf2:
+      kind: linux
+      image: git.ipng.ch/ipng/vpp-containerlab:v25.10.0
+
+  links:
+    - endpoints: ["leaf1:ethernet-1/1", "leaf2:eth1"]
+```
+
+</details>
+
+**What did we learn ?**
+- How to define your own topology.
+
 
 ## 3. Running & configuring your lab
 
