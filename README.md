@@ -509,7 +509,7 @@ We will add a client to generate traffic to leaf1 and leaf2 and configure BGP to
 
 The topology should be expanded to resemble below:
 
-![Topology](image/5.topology.png)
+![Topology](images/5.topology.png)
 
 #### Task 5.1 - Adding clients to your topology
 
