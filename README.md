@@ -276,43 +276,46 @@ Links to relevant documentations:
 VPP
 [SR Linux](https://learn.srlinux.dev/get-started/interface/)
 
-> [!Tip]
-> SR Linux hints
+>[!Tip]
+> **SR Linux hints**
 > <details>
 > <summary>Navigating the CLI</summary>
-> 
-> * After logging in, you are in the **running** mode. This is the equivalent of operational mode on other network OSes, and you cannot make changes to the configuration in this mode.
-> * You can switch between modes using the `enter <mode>` command. The configuration mode is called the **candidate** mode
-> * The `info` command shows you the configuration in the current mode. `info <path>` shows you a specific path of configuration. To view the running configuration while in candidate mode, use `info from running <path>` (and vice-versa)
-> * `show` commands can be used to view certain reports about the switch. For example, `show interface brief` gives you an overview of the state of interfaces, while `show interface mgmt0` (or any specific interface name) gives you details about an interface
+>
+>    * After logging in, you are in the **running** mode. This is the equivalent of operational mode on other network OSes, and you cannot make changes to the configuration in this mode.
+>
+>    * You can switch between modes using the `enter <mode>` command. The configuration mode is called the **candidate** mode
+>
+>    * The `info` command shows you the configuration in the current mode. `info <path>` shows you a specific path of configuration. To view the running configuration while in candidate mode, use `info from running <path>` (and vice-versa)
+>
+>    * `show` commands can be used to view certain reports about the switch. For example, `show interface brief` gives you an overview of the state of interfaces, while `show interface mgmt0` (or any specific interface name) gives you details about an interface
 > </details>
 > 
 > <details>
 > <summary>Configuring an interface</summary>
-> 
-> * SR Linux uses a hierarchical, model-based configuration, based on the YANG model of SR Linux. The interface related settings can be found in the `interface` section
-> * IP configuration cannot be directly applied to a physical interface, it must be done on a logical subinterface instead.
-> * Parts of the configuration hierarchy must be explicitly enabled with the `admin-state enabled` setting. In this case, `interface X`, `subinterface Y` and `ipv4` are three sections that can have their admin-state toggled, and the first two are implicit enabled, the last section, however, is not.
+>
+> - SR Linux uses a hierarchical, model-based configuration, based on the YANG model of SR Linux. The interface related settings can be found in the `interface` section
+> - IP configuration cannot be directly applied to a physical interface, it must be done on a logical subinterface instead.
+> - Parts of the configuration hierarchy must be explicitly enabled with the `admin-state enabled` setting. In this case, `interface X`, `subinterface Y` and `ipv4` are three sections that can have their admin-state toggled, and the first two are implicit enabled, the last section, however, is not.
 > </details>
 >
 > <details>
 > <summary>Assigning an interface to a network-instance</summary>
-> 
-> * In SR Linux, all (logical) interfaces must be associated with a network-instance in order to pass traffic, and they are not associated to any by default.
-> * A default network-instance can be used to provide base connectivity and control-plane protocols for other network-instances to be carried over. This is called the 'default' network-instance and has the type 'default'
+>
+> - In SR Linux, all (logical) interfaces must be associated with a network-instance in order to pass traffic, and they are not associated to any by default.
+> - A default network-instance can be used to provide base connectivity and control-plane protocols for other network-instances to be carried over. This is called the 'default' network-instance and has the type 'default'
 > </details>
 > 
-> <details
+> <details>
 > <summary>Managing the configuration</summary>
-> 
-> * The SR Linux CLI will tell you if there's a change in the candidate configuration compared to the running configuration - look for the **asterisk *** in the prompt.
-> * SR Linux is transaction-based, and changes are applied atomically by performing a `commit`
-> * You can use the `diff` command to see the difference between the candidate and running configuration.
-> * You can validate your changes before applying the candidate configuration by doing a `commit validate`
-> * Commit can be performed using `commit now` or `commit stay`. The former returns you to the **running** mode, the latter leaves you in **candidate** mode.
+>
+> - The SR Linux CLI will tell you if there's a change in the candidate configuration compared to the running configuration - look for the **asterisk *** in the prompt.
+> - SR Linux is transaction-based, and changes are applied atomically by performing a `commit`
+> - You can use the `diff` command to see the difference between the candidate and running configuration.
+> - You can validate your changes before applying the candidate configuration by doing a `commit validate`
+> - Commit can be performed using `commit now` or `commit stay`. The former returns you to the **running** mode, the latter leaves you in **candidate** mode.
 > * Commits can be performed in a safe manner by using `commit confirmed`. This starts a confirm timer, and if it expires, the commit is reverted, unless the commit is confirmed using the `tools system configuration confirmed-accept` command.
-> * When the running configuration is changed, it is not saved to the disk yet. A **plus +** in the prompt marks an unsaved change in the **running** configuration compared to the startup configuration.
-> * To save a running configuration in SR Linux, run the `save startup` command
+> - When the running configuration is changed, it is not saved to the disk yet. A **plus +** in the prompt marks an unsaved change in the **running** configuration compared to the startup configuration.
+> - To save a running configuration in SR Linux, run the `save startup` command
 > </details>
 
 > [!Tip]
