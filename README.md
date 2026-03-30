@@ -6,29 +6,6 @@ You should have received a note with Wi-Fi connectivity details, your instance I
 
 Your VM can be reached on `<vmID>.<example.com>`.  
 
-SSH access is via a Jumphost.
-Access your VM with any OpenSSH client with: 
-```
-ssh -J user@<example.com:2222> user@<vmID>
-```
-
-> [!TIP]
-> For simplified access in your SSH config file (~/.ssh/config), you can set it up like this:  
-> ```
-> Host jump-host
->     HostName <example.com>
->     User jump-user
->
-> Host <vmID>
->     HostName 192.168.50.<vmID>
->     User user
->     ProxyJump jump-host
->```
-> This allows to access your VM with `ssh user@<vmID>.<example.com>`
-
-
-A Visual Studio Code web interface running on HTTPS port 8443. Optionally use your own VS Code installation on your laptop, to connect remotely to the instance.
-
 At the end of each activity, a solution proposal is provided. This allows you to become unstuck or to continue with next activity since activities build on previous activities.
 
 ## 1. Containerlab installation
