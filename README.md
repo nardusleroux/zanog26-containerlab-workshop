@@ -496,6 +496,8 @@ The topology should be expanded to resemble below:
 #### Task 5.2 - Adding BGP configuration
 
 
+#### Task 5.3 - Validate client1 to client2 connectivity
+
 
 ## 6. VSCode plugin
 
