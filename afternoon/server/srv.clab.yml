@@ -4,7 +4,7 @@ prefix: "zanog"
 mgmt:
   network: clab-mgmt
   ipv4-subnet: 172.20.0.0/22
-  ipv6-subnet: 3ff1:172:8298::/64
+  ipv6-subnet: 3ff1:172:20::/64
 
 topology:
   kinds:
@@ -12,7 +12,7 @@ topology:
       image: git.ipng.ch/ipng/vpp-containerlab:latest
       startup-config: config/__clabNodeName__/vppcfg.yaml
       binds:
-        - config/__clabNodeName__/bird-local.conf:/etc/bird/bird-local.conf:rw
+        - config/__clabNodeName__/bird-local.conf:/config/bird/bird-local.conf:rw
 
   nodes:
     vpplab:
@@ -37,6 +37,7 @@ topology:
         - ip link set address 00:c1:ab:00:00:01 mtu 1500 dev eth1
         - ip addr add 10.0.0.66/28 dev eth1
         - ip route add 10.0.0.0/8 via 10.0.0.65
+        - ip route add 192.0.2.0/24 via 10.0.0.65
         - ip addr add 2001:db8:0:100::2/64 dev eth1
         - ip route add 2001:db8::/32 via 2001:db8:0:100::1
 
