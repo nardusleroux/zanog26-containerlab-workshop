@@ -1,0 +1,40 @@
+name: "p{{ id }}"
+prefix: "zanog"
+
+mgmt:                                                                                                                                               
+  network: clab-mgmt                                
+  ipv4-subnet: 172.20.0.0/22
+  ipv6-subnet: 3ff1:17:20::/64
+
+topology:
+  kinds:
+    fdio_vpp:
+      image: git.ipng.ch/ipng/vpp-containerlab:stable
+      startup-config: config/__clabNodeName__/vppcfg.yaml
+      binds:
+        - config/__clabNodeName__/bird-local.conf:/config/bird/bird-local.conf:rw
+    linux:
+      image: ghcr.io/srl-labs/network-multitool:v0.6.0
+
+  nodes:
+    vpplab:
+      kind: bridge
+    vpp1:
+      kind: fdio_vpp
+    vpp2:
+      kind: fdio_vpp
+    client:
+      kind: linux
+      exec:
+        - ip link set address 00:c1:ab:{{ '%x' % id }}:00:01 mtu 1500 dev eth1
+        - ip addr add 10.0.{{ id }}.66/28 dev eth1
+        - ip route add 10.0.0.0/8 via 10.0.{{ id }}.65
+        - ip route add 192.0.2.0/24 via 10.0.{{ id }}.65
+        - ip addr add 2001:db8:{{ '%x' % id }}:100::2/64 dev eth1
+        - ip route add 2001:db8::/32 via 2001:db8:{{ '%x' % id }}:100::1
+        - apk add traceroute
+
+  links:
+    - endpoints: ["vpplab:p{{ id }}-v1-e3", "vpp1:eth1"]
+    - endpoints: ["vpp1:eth2", "vpp2:eth1"]
+    - endpoints: ["vpp2:eth2", "client:eth1"]

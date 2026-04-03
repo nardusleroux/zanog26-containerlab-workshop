@@ -1,0 +1,60 @@
+#!/usr/bin/env python3
+import argparse
+import sys
+from pathlib import Path
+
+import yaml
+from jinja2 import Environment, FileSystemLoader, StrictUndefined
+
+SCRIPT_DIR = Path(__file__).parent
+VARS_FILE = SCRIPT_DIR / "vars.yaml"
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Generate containerlab participant files from Jinja2 templates")
+    parser.add_argument("-id", type=int, required=True, metavar="N", help="Participant ID (1-100)")
+    parser.add_argument("-indir", metavar="DIR", default=str(SCRIPT_DIR / "files-start"), help="Template input directory (default: ./files-start/)")
+    parser.add_argument("-outdir", metavar="DIR", default=None, help="Output directory (default: stdout)")
+    args = parser.parse_args()
+
+    if not 1 <= args.id <= 100:
+        print(f"error: -id must be between 1 and 100, got {args.id}", file=sys.stderr)
+        sys.exit(1)
+
+    files_dir = Path(args.indir)
+
+    with VARS_FILE.open() as f:
+        context = yaml.safe_load(f) or {}
+    context["id"] = args.id
+
+    env = Environment(
+        loader=FileSystemLoader(str(files_dir)),
+        keep_trailing_newline=True,
+        undefined=StrictUndefined,
+    )
+
+    templates = sorted(files_dir.rglob("*.j2"))
+    if not templates:
+        print(f"error: no .j2 templates found under {files_dir}", file=sys.stderr)
+        sys.exit(1)
+
+    for tmpl_path in templates:
+        rel = tmpl_path.relative_to(files_dir)
+        out_name = rel.with_suffix("") if rel.suffix == ".j2" else rel
+
+        rendered = env.get_template(str(rel)).render(context)
+
+        if args.outdir is None:
+            print(f"### {out_name} ###")
+            print(rendered)
+        else:
+            out_path = Path(args.outdir) / out_name
+            out_path.parent.mkdir(parents=True, exist_ok=True)
+            if out_path.exists():
+                print(f"error: {out_path} already exists, refusing to overwrite", file=sys.stderr)
+                sys.exit(1)
+            out_path.write_text(rendered)
+
+
+if __name__ == "__main__":
+    main()

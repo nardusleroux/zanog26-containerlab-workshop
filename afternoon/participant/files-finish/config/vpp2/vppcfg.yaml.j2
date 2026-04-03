@@ -1,0 +1,16 @@
+interfaces:
+  eth1:
+    description: 'To vpp1'
+    mtu: 1500
+    lcp: eth1
+    addresses: [ 10.0.{{ id }}.17/31, 2001:db8:{{ '%x' % id }}:1::2/64 ]
+  eth2:
+    description: 'To client'
+    mtu: 1500
+    lcp: eth2
+    addresses: [ 10.0.{{ id }}.65/28, 2001:db8:{{ '%x' % id }}:100::1/64 ]
+loopbacks:
+  loop0:
+    description: 'vpp2'
+    lcp: loop0
+    addresses: [ 10.0.{{ id }}.2/32, 2001:db8:{{ '%x' % id }}::2/128 ]

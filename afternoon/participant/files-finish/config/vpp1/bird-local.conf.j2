@@ -1,0 +1,41 @@
+protocol static static4 {
+  ipv4 { export all; };
+  route 10.0.{{ id }}.0/24 unreachable;
+}
+
+protocol static static6 {
+  ipv6 { export all; };
+  route 2001:db8:{{ '%x' % id }}::/48 unreachable;
+}
+
+protocol bfd bfd1 {
+  interface "eth*" { interval 100 ms; multiplier 30; };
+}
+
+protocol ospf v2 ospf4 {
+  ipv4 { import all; export all; };
+  area 0 {
+    interface "loop0" { stub yes; };
+    interface "eth2" { type pointopoint; cost 10; bfd on; };
+  };
+}
+
+protocol ospf v3 ospf6 {
+  ipv6 { import all; export all; };
+  area 0 {
+    interface "loop0" { stub yes; };
+    interface "eth2" { type pointopoint; cost 10; bfd on; };
+  };
+}
+
+protocol bgp ebgp_ipv4 {
+    neighbor 192.0.2.254 as 65000;
+    local 192.0.2.{{ id }} as {{ 65000 + id }};
+    ipv4 { import all; export all; };
+}
+
+protocol bgp ebgp_ipv6 {
+    neighbor 2001:db8:8298::fe as 65000;
+    local 2001:db8:8298::{{ '%x' % id }} as {{ 65000 + id }};
+    ipv6 { import all; export all; };
+}
