@@ -41,7 +41,7 @@ interface with all other participants and the Server Lab.
 Participants will receive:
 *   A participant ID (between 1 and 100 inclusive)
 *   A username + password to log in to the shared server.
-*   Shared LAN: 192.0.2.ID/24` and `2001:db8:8298::ID_HEX/64` and ASN `65000+ID`
+*   Shared LAN: `192.0.2.ID/24` and `2001:db8:8298::ID_HEX/64` and ASN `65000+ID`
 *   IPv4: `10.0.ID.0/24` and IPv6: `2001:db8:ID_HEX::/48`
 
 Participants will build up their LAB one step at a time:
@@ -50,4 +50,5 @@ Participants will build up their LAB one step at a time:
 1.  `vpp2 <-> vpp1` OSPF and OSPFv3
 1.  `vpp1 <-> Shared LAN`
 1.  `vpp1 <-> server:vpp1` eBGP
-1.   End to end test from `client` all the way to `server:web` using Curl for IPv6 and IPv4
+1.   End to end test from `client` all the way to `server:web` using `curl(1)` for IPv6 and IPv4
+
