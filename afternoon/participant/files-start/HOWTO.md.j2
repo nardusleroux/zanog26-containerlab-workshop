@@ -1,0 +1,524 @@
+# {{ course }}
+## Training Manual
+
+## Your Containerlab Details
+
+(version v1.0.1)
+
+| Participant    | {{ id }} |
+|----------------|----------|
+| **Server**     | `dell730-srv0.ipng.ch` |
+| **Username**   | `zanog{{id}}` |
+| **Password**   | `vpp{{pin}}` |
+| **IPv4**       | 10.0.{{ id }}.0/24 |
+| **IPv6**       | 2001:db8:{{ '%x' % id }}::/48 |
+| **Shared LAN** | 192.0.2.{{ id }}/24 and 2001:db8:8298::{{ '%x' % id }}/64 |
+| **Your ASN**   | {{ 65000 + id }} |
+
+## Welcome to your Containerlab
+
+Let's first take a good look at what you're going to be working with:
+
+![Containerlab Overview](Containerlab.svg)
+
+In this diagram, you will be working with three components, called _nodes_ in Containerlab. From
+left to right they are:
+
+1.  `vpp1`: A VPP Router that is connected to a shared subnet with other pariticipants, and to a
+    second VPP router.
+1.  `vpp2`: A VPP router that is connected to `vpp1` and a Linux container
+1.  `client`: A Linux node that is connected behind the two VPP routers.
+
+## Goals for this Training
+
+You will work through the configuration of both VPP routers, so that you connect your lab to all the
+other labs run by other participants. If you're successful, you will be able to connect to a
+webserver running behind another router on the 'Shared LAN'.
+
+You will learn:
+
+*   VPP configuration using `vppcfg`
+*   Bird2 configuration of OSPF
+*   Bird2 configuration of BGP
+*   `traceroute` and `ping` to explore the LAB network
+*   `curl` to fetch HTML files from a webserver
+
+<div style="page-break-after: always;"></div>                                                                                                       
+
+### Step 1: Starting your Containerlab
+
+You'll first need to log in to the shared server running at IPng Networks in Switzerland. Your
+details (hostname, username, and password) are at the top of this manual.
+
+Once logged in,  you can change to your Containerlab working directory which we've prepared for you.
+
+```
+$ cd ~/containerlab-p{{id}}/
+$ clab deploy
+```
+
+After just a few moments, the LAB will be started for you. You can see which nodes are available to
+you, there will be three: `vpp1`, `vpp2` and `client`. Your lab has a unique prefix, which allows
+multiple participants to work on the same server as you:
+
+*   Your `vpp1` node is called `zanog-p{{id}}-vpp1`
+*   Your `vpp2` node is called `zanog-p{{id}}-vpp2`
+*   Your `client` linux host is called `zanog-p{{id}}-client`
+
+You can connect to them using `clabc` (which stands for _containerlab client_). For example, to
+connect to the `vpp2` node, use:
+
+```
+$ clabc vpp2
+root@vpp2:/# vppctl show version
+vpp v26.06-rc0~384-g0d14316cb built by pim on summer at 2026-03-29T18:37:04
+root@vpp2:/# exit
+$
+```
+
+You can take a look around on your `vpp2` node. You'll find that VPP keeps it configuration files in
+a directory called `/config/vpp/` and Bird2, a routing daemon that is used for OSPF and BGP, keeps
+its configuration files in a directory called `/config/bird/`. In the next steps, we will complete
+the configuration files in these directories.
+
+<div style="page-break-after: always;"></div>                                                                                                       
+### Step 2: Connecting client to VPP2
+
+![step2](Containerlab Step 2.svg)
+
+In this step you will configure `vpp2` to complete the connection to the `client` node. VPP is
+configured using the file `/config/vpp/vppcfg.yaml`. Open this file with an editor of your choice,
+like `nano` or `vim`. We're going to assign an IPv4 and IPv6 address to the `eth2` interface, see
+the red circle in the diagram above.
+
+For this subnet between `client` and `vpp2`, we will be using:
+
+*    IPv4: `10.0.{{id}}.64/28` where `vpp2` is `.65` and `client` is already `.66`
+*    IPv6: `2001:db8:{{ '%x' % id }}:100::/64` where `vpp2` is `::1` and `client` is already `::2` ]
+
+If you've edited the file correctly, it should look like this:
+
+```
+root@vpp2:/# nano /config/vpp/vppcfg.yaml
+interfaces:
+  eth1:
+    description: 'To vpp1'
+    mtu: 1500
+    lcp: eth1
+  eth2:
+    description: 'To client'
+    mtu: 1500
+    lcp: eth2
+>>    addresses: [ 10.0.{{id}}.65/28, 2001:db8:{{ '%x' % id }}:100::1/64 ]
+loopbacks:
+  loop0:
+    description: 'vpp2'
+    lcp: loop0
+```
+
+The line to add is marked in bright green. There's a utility called `vppcfg` which can apply this
+configuration to VPP. You can see what it would change by running the `vppcfg plan` command:
+
+```
+root@vpp2:/# vppcfg plan
+```
+
+And you can commit the configuration to the router with the `vppcfg apply` command:
+
+```
+root@vpp2:/# vppcfg apply
+```
+
+If you successfully committed the configuration, you should be able to ping the `client` node:
+
+```
+root@vpp2:/# ip -br a
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+loop0            UP             fe80::dcad:ff:fe00:0/64 
+eth1             UNKNOWN        fe80::a8c1:abff:fe69:750d/64 
+>>eth2             UNKNOWN        10.0.64.65/28 2001:db8:40:100::1/64 fe80::a8c1:abff:fe11:748f/64 
+
+root@vpp2:/# ping 10.0.{{id}}.66
+root@vpp2:/# ping 2001:db8:{{'%x' % id}}:100::2
+```
+
+The addresses you just applied are shown in green above. When issuing the `ping` commands,
+you should see responses from both the IPv4 and IPv6 addresses. That's the `client` node responding.
+
+<div style="page-break-after: always;"></div>                                                                                                       
+### Step 3: Connecting VPP2 to VPP1
+
+![Step 3](Containerlab Step 3.svg)
+
+In this step you will connect `vpp2:eth1` to `vpp1:eth2`, by configuring an IPv4 and IPv6 address on
+each interface in file `/config/vpp/vppcfg.yaml`. See the red circle in the diagram above. For this
+subnet between `vpp1` and `vpp2`, you will be using:
+
+*    IPv4: `10.0.{{id}}.16/31` where `vpp1:eth2` is `.16` and `vpp2:eth1` is `.17`
+*    IPv6: `2001:db8:{{ '%x' % id }}:1::/64` where `vpp1:eth2` is `::1` and `vpp2:eth1` is `::2`
+
+Using the same approach as the previous step, edit the file, run `vppcfg plan` and then `vppcfg
+apply`. Start with `vpp2`, the same router you edited in the previous step.
+
+```
+root@vpp2:/# nano /config/vpp/vppcfg.yaml
+interfaces:
+  eth1:
+    description: 'To vpp1'
+    mtu: 1500         
+    lcp: eth1
+>>    addresses: [ 10.0.{{id}}.17/31, 2001:db8:{{'%x' % id}}:1::2/64 ]
+  eth2:
+    description: 'To client'
+    mtu: 1500
+    lcp: eth2
+    addresses: [ 10.0.{{id}}.65/28, 2001:db8:{{'%x' % id}}:100::1/64 ]
+loopbacks:
+  loop0:
+    description: 'vpp2'
+    lcp: loop0
+```
+
+Check the config with `vppcfg plan`, then commit it with `vppcfg apply`. This should complete the
+configuration of `vpp2`.  Log out from it with `exit`, and then connect to `vpp1` and edit its `eth2` address:
+```
+root@vpp1:/# nano /config/vpp/vppcfg.yaml
+interfaces:
+  eth1:
+    description: 'To vpplab shared LAN'
+    mtu: 1500         
+    lcp: eth1
+  eth2:
+    description: 'To vpp2'
+    mtu: 1500
+    lcp: eth2
+>>    addresses: [ 10.0.{{id}}.16/31, 2001:db8:{{'%x' % id}}:1::1/64 ]
+loopbacks:
+  loop0:
+    description: 'vpp1'
+    lcp: loop0
+root@vpp1:/# vppcfg plan
+root@vpp1:/# vppcfg apply
+```
+
+Now that you've configured both sides of this link between `vpp2` and `vpp1`, you should be able to
+ping both with both IPv4 and IPv6:
+
+```
+root@vpp1:/# ping 10.0.{{id}}.17
+root@vpp1:/# ping 2001:db8:{{'%x' % id}}:1::2
+```
+
+<div style="page-break-after: always;"></div>                                                                                                       
+### Step 4: Enabling OSPF on VPP2
+
+![Step 4](Containerlab Step 4.svg)
+
+In this step you'll enable OSPF on `vpp2` for IPv4 and IPv6 by placing interface `loop0` and `eth1`
+into the OSPF backbone area. First, you give the `loop0` interface an IPv4 and IPv6 address, by
+editing `/config/vpp/vppcfg.yaml`:
+
+```
+root@vpp2:/# nano /config/vpp/vppcfg.yaml
+...
+loopbacks:
+  loop0:
+    description: 'vpp2'
+    lcp: loop0
+>>    addresses: [ 10.0.{{ id }}.2/32, 2001:db8:{{ '%x' % id }}::2/128 ]
+```
+After you've added the addresses marked in green above to the `loop0` interface, you can check the
+configuration with `vppcfg plan` and then commit it with `vppcfg apply`.
+
+Next, you will edit the Bird2 configuration file as follows:
+
+```
+root@vpp2:/# nano /config/bird/bird-local.conf
+router id 10.0.{{ id }}.2;
+protocol ospf v2 ospf4 {
+  ipv4 { import all; export all; };
+  area 0 {
+    interface "loop0" { stub yes; };
+    interface "eth1" { type pointopoint; cost 10; };
+  };
+}
+protocol ospf v3 ospf6 {
+  ipv6 { import all; export all; };
+  area 0 {
+    interface "loop0" { stub yes; };
+    interface "eth1" { type pointopoint; cost 10; };
+  };
+}
+```
+
+You can check the configuration with `bird -p` and if there are no errors, you can commit it with
+`birdc configure`. You should now see the new `ospf4` and `ospf6` protocols:
+
+```
+root@vpp2:/# birdc show proto
+BIRD 2.18 ready.
+Name       Proto      Table      State  Since         Info
+device1    Device     ---        up     2026-04-03 19:17:31  
+direct1    Direct     ---        up     2026-04-03 19:17:31  
+kernel4    Kernel     master4    up     2026-04-03 19:17:31  
+kernel6    Kernel     master6    up     2026-04-03 19:17:31  
+bfd1       BFD        ---        up     2026-04-03 19:17:31  
+ospf4      OSPF       master4    up     2026-04-03 19:17:31  Alone
+ospf6      OSPF       master6    up     2026-04-03 19:17:31  Alone
+```
+
+It's OK that the router is **Alone**, this is because the other router `vpp1` hasn't been configured
+yet. We'll do that next!
+
+### Step 5: Enabling OSPF on VPP1
+
+![Step 5](Containerlab Step 5.svg)
+
+In this step you'll enable OSPF on `vpp1` for IPv4 and IPv6 by placing interface `loop0` and `eth2`
+into the OSPF backbone area. First, you give the `loop0` interface an IPv4 and IPv6 address, by
+editing `/config/vpp/vppcfg.yaml`:
+
+```
+root@vpp1:/# nano /config/vpp/vppcfg.yaml
+...
+loopbacks:
+  loop0:
+    description: 'vpp1'
+    lcp: loop0
+>>    addresses: [ 10.0.{{ id }}.1/32, 2001:db8:{{ '%x' % id }}::1/128 ]
+```
+After you've added the addresses marked in green above to the `loop0` interface, you can check the
+configuration with `vppcfg plan` and then commit it with `vppcfg apply`.
+
+Next, you will edit the Bird2 configuration file, in exactly the same way as the other router in the
+previous step, except on `vpp1` you'll be adding `eth2`:
+
+```
+root@vpp1:/# nano /config/bird/bird-local.conf
+router id 10.0.{{ id }}.1;
+protocol ospf v2 ospf4 {
+  ipv4 { import all; export all; };
+  area 0 {
+    interface "loop0" { stub yes; };
+    interface "eth2" { type pointopoint; cost 10; };
+  };
+}
+protocol ospf v3 ospf6 {
+  ipv6 { import all; export all; };
+  area 0 {
+    interface "loop0" { stub yes; };
+    interface "eth2" { type pointopoint; cost 10; };
+  };
+}
+```
+
+You can check the configuration with `bird -p` and if there are no errors, you can commit it with
+`birdc configure`. You should now see the new `ospf4` and `ospf6` protocols:
+
+```
+root@vpp1:/# birdc show proto
+BIRD 2.18 ready.
+Name       Proto      Table      State  Since         Info
+device1    Device     ---        up     2026-04-03 19:17:31  
+direct1    Direct     ---        up     2026-04-03 19:17:31  
+kernel4    Kernel     master4    up     2026-04-03 19:17:31  
+kernel6    Kernel     master6    up     2026-04-03 19:17:31  
+bfd1       BFD        ---        up     2026-04-03 19:17:31  
+ospf4      OSPF       master4    up     2026-04-03 19:17:31  Running
+ospf6      OSPF       master6    up     2026-04-03 19:17:31  Running
+```
+
+If you've done Step4+Step5 correctly, the routers will have found each other and formed an OSPF
+adjacency. They will be exchanging routing information from now on. You can check this with:
+
+```
+root@vpp1:/# birdc show ospf neighbors
+```
+
+Once the routers have an OSPF adjacency, `vpp1` will be able to reach the `client` node via `vpp2`,
+which you can validate with:
+
+```
+root@vpp1:/# ping 10.0.{{id}}.66
+root@vpp1:/# ping 2001:db8:{{'%x' % id}}:100::2
+```
+
+<div style="page-break-after: always;"></div>                                                                                                       
+### Step 6: Configuring the Shared LAN on VPP1
+
+![Step 6](Containerlab Step 6.svg)
+
+Your lab is interconnected with every other participant's lab using a shared network. You have been
+assigned an IPv4 and IPv6 address in this shared network:
+
+*    IPv4: `192.0.2.{{id}}/24`
+*    IPv6: `2001:db8:8298::{{ '%x' % id }}/64`
+
+By now, you've practiced adding addresses to VPP several times, for this you'll edit
+`/config/vpp/vppcfg.yaml` and commit it, like so:
+
+```
+root@vpp1:/# nano /config/vpp/vppcfg.yaml
+interfaces:
+  eth1:
+    description: 'To vpplab shared LAN'
+    mtu: 1500
+    lcp: eth1
+>>    addresses: [ 192.0.2.{{ id }}/24, 2001:db8:8298::{{ '%x' % id }}/64 ]
+...
+```
+
+Once you've edited the VPP config file and added the addresses shown in green above, you can check
+it and commit it with:
+
+```
+root@vpp1:/# vppcfg plan
+root@vpp1:/# vppcfg apply
+```
+
+If all is well, you should now be able to reach the Teacher's VPP router:
+
+```
+root@vpp1:/# ping 192.0.2.254
+root@vpp1:/# ping 2001:db8:8298::fe
+```
+
+Do both IPv4 and IPv6 address ping? Then you're ready to go to the last configuration step!
+
+<div style="page-break-after: always;"></div>                                                                                                       
+### Step 7: Enabling eBGP on VPP1
+
+On the internet, BGP peers will accept typically only /24 or larger IPv4 prefixes, and /48 or larger
+IPv6 prefixes. You have been assigned the following prefixes for your lab:
+
+*    IPv4: `10.0.{{id}}.0/24`
+*    IPv6: `2001:db8:{{'%x' % id }}::/48`
+*    AS Number: {{ 65000 + id }}
+
+BGP announcements can only occur if the router has a route for these prefixes. However, until now
+you've configured only more-specifics (like the /32 or /128 on `loop0`). To address this and make
+sure the aggregate prefixes are present in your routing table, you'll now configure them by adding
+the following to your Bird config:
+
+```
+root@vpp1:/# nano /config/bird/bird-local.conf
+protocol static static4 {
+  ipv4 { export all; };
+  route 10.0.{{ id }}.0/24 unreachable;
+}
+
+protocol static static6 {
+  ipv6 { export all; };
+  route 2001:db8:{{ '%x' % id }}::/48 unreachable;
+}
+```
+
+You can check your work with `bird -p` and commit it with `birdc configure`. There is one last step,
+and that's to configure the BGP sessions to the Teacher's lab, by adding them to the end of
+`bird-local.conf`:
+
+```
+root@vpp1:/# nano /config/bird/bird-local.conf
+protocol bgp ebgp_ipv4 {
+    neighbor 192.0.2.254 as 65000;
+    local 192.0.2.{{ id }} as {{ 65000 + id }};
+    ipv4 { import all; export all; };
+}
+
+protocol bgp ebgp_ipv6 {
+    neighbor 2001:db8:8298::fe as 65000;
+    local 2001:db8:8298::{{ '%x' % id }} as {{ 65000 + id }};
+    ipv6 { import all; export all; };
+}
+```
+
+You can check your work with `bird -p` and commit it with `birdc configure`. After a few moments,
+you will see the BGP sessions come up:
+
+```
+root@vpp1:/# birdc show proto
+BIRD 2.18 ready.
+Name       Proto      Table      State  Since         Info
+device1    Device     ---        up     2026-04-03 19:17:31  
+direct1    Direct     ---        up     2026-04-03 19:17:31  
+kernel4    Kernel     master4    up     2026-04-03 19:17:31  
+kernel6    Kernel     master6    up     2026-04-03 19:17:31  
+static4    Static     master4    up     2026-04-03 19:17:31  
+static6    Static     master6    up     2026-04-03 19:17:31  
+bfd1       BFD        ---        up     2026-04-03 19:17:31  
+ospf4      OSPF       master4    up     2026-04-03 19:17:31  Running
+ospf6      OSPF       master6    up     2026-04-03 19:17:31  Running
+>>ebgp_ipv4  BGP        ---        up     2026-04-03 19:17:39  Established   
+>>ebgp_ipv6  BGP        ---        up     2026-04-03 19:17:39  Established   
+```
+
+If the sessions do not come up to **Established** state, don't worry. Ask a teacher or assistant for
+help. Getting BGP sessions can be tricky, but if you've followed these steps, you should see both
+sessions up and running.
+
+<div style="page-break-after: always;"></div>                                                                                                       
+### Step 8: End to End test
+
+![Step 8](Containerlab Step 8.svg)
+
+Your Containerlab is one of the ones on the right here. The teacher has also deployed a
+containerlab, with a webserver in it. You can see it on the bottom left, with the red circle around
+it. It has a well known IPv4 and IPv6 address, which are announced by its own Teacher's `vpp1` node.
+
+*    IPv4: `10.0.0.66`
+*    IPv6: `2001:db8:0:100::2`
+
+Make sure you can ping the reach the server from your lab, by tracerouting it:
+
+```
+[*]─[client]─[/]
+└──> traceroute 10.0.0.66
+traceroute to 10.0.0.66 (10.0.0.66), 30 hops max, 60 byte packets
+ 1  10.0.{{id}}.65 (10.0.{{id}}.65)  6.811 ms  7.121 ms  6.887 ms
+ 2  10.0.{{id}}.16 (10.0.{{id}}.16)  18.540 ms  18.440 ms  17.123 ms
+ 3  192.0.2.254 (192.0.2.254)  30.380 ms  30.112 ms  42.760 ms
+ 4  10.0.0.17 (10.0.0.17)  48.495 ms  49.110 ms  50.120 ms
+ 5  10.0.0.66 (10.0.0.66)  50.470 ms  50.465 ms  50.458 ms
+
+[*]─[client]─[/]
+└──> traceroute 2001:db8:0:100::2
+traceroute to 2001:db8:0:100::2 (2001:db8:0:100::2), 30 hops max, 80 byte packets
+ 1  2001:db8:{{ '%x' % id }}:100::1 (2001:db8:{{ '%x' % id }}:100::1)  10.717 ms  12.220 ms  17.543 ms
+ 2  2001:db8:{{ '%x' % id }}:1::1 (2001:db8:{{ '%x' % id }}:1::1)  34.658 ms  37.112 ms  53.117 ms
+ 3  2001:db8:8298::fe (2001:db8:8298::fe)  42.640 ms  58.228 ms  55.455 ms
+ 4  2001:db8:0:1::2 (2001:db8:0:1::2)  62.644 ms  72.871 ms  73.550 ms
+ 5  2001:db8:0:100::2 (2001:db8:0:100::2)  74.615 ms  74.609 ms  74.607 ms
+```
+
+You are now ready to complete the training! Using a web client called `curl`, you can fetch a
+special three-word token that the server serves specifically to your Containerlab client. These
+tokens are unique to each Containerlab. Write them in the table below to complete your training:
+  
+``` 
+[*]─[client]─[/]
+└──> curl 10.0.0.66
+
+[*]─[client]─[/]
+└──> curl [2001:db8:0:100::2]
+```
+
+What did the server answer you? 
+
+<table style="width:100%; border-collapse: collapse;">
+  <thead>
+    <tr style="">
+      <th style="width: 33%; border: 2px solid black; padding: 4px;">Server Endpoint</th>
+      <th style="width: 66%; border: 2px solid black; padding: 4px;">Three Word Token</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="height: 1cm;">
+      <td style="width: 33%; border: 2px solid black; padding: 4px;"><code>curl 10.0.0.66</code></td>
+      <td style="width: 66%; border: 2px solid black; padding: 4px;">...</td>
+    </tr>
+    <tr style="height: 1cm;">
+      <td style="width: 33%; border: 2px solid black; padding: 4px;"><code>curl [2001:db8:0:100::2]</code></td>
+      <td style="width: 66%; border: 2px solid black; padding: 4px;">...</td>
+    </tr>
+  </tbody>
+</table>
