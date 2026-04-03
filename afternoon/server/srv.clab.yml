@@ -1,0 +1,41 @@
+name: "srv"
+prefix: "zanog"
+
+topology:
+  kinds:
+    fdio_vpp:
+      image: git.ipng.ch/ipng/vpp-containerlab:latest
+      startup-config: config/__clabNodeName__/vppcfg.yaml
+      binds:
+        - config/__clabNodeName__/bird-local.conf:/etc/bird/bird-local.conf:rw
+
+  nodes:
+    vpplab:
+      kind: bridge
+    vpp1:
+      kind: fdio_vpp
+    vpp2:
+      kind: fdio_vpp
+    web:
+      kind: linux
+      image: git.ipng.ch/ipng/clab-webserver:latest
+      binds:
+        - config:/app/config:ro
+        - docroot:/app/docroot:ro
+      env:
+        CLIENT_MAP: /app/config/client-map.yaml
+        DOCROOT: /app/docroot/
+        LISTEN: ":80"
+      ports:
+        - "80:80"
+      exec:
+        - ip link set address 00:c1:ab:00:00:01 mtu 1500 dev eth1
+        - ip addr add 10.0.0.66/28 dev eth1
+        - ip route add 10.0.0.0/8 via 10.0.0.65
+        - ip addr add 2001:db8:0:100::2/64 dev eth1
+        - ip route add 2001:db8::/32 via 2001:db8:0:100::1
+
+  links:
+    - endpoints: ["vpplab:srv-v1-e3", "vpp1:eth1"]
+    - endpoints: ["vpp1:eth2", "vpp2:eth1"]
+    - endpoints: ["vpp2:eth2", "web:eth1"]

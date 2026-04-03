@@ -1,0 +1,7 @@
+Welcome, {{ .course }} participant from {{ .remote_address }}!
+I see you are using "{{ .user_agent }}".
+
+Your token is "{{ .client_map_token }}"
+
+You may write it in your workbook and give to your teacher. Thank you for
+participating in the {{ .course }} session.
