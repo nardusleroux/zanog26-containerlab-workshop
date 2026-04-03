@@ -28,13 +28,13 @@ VARS_FILE = SCRIPT_DIR / "vars.yaml"
 
 def main():
     parser = argparse.ArgumentParser(description="Generate containerlab participant files from Jinja2 templates")
-    parser.add_argument("-id", type=int, required=True, metavar="N", help="Participant ID (1-100)")
+    parser.add_argument("-id", type=int, required=True, metavar="N", help="Participant ID (1-128)")
     parser.add_argument("-indir", metavar="DIR", default=str(SCRIPT_DIR / "files-start"), help="Template input directory (default: ./files-start/)")
     parser.add_argument("-outdir", metavar="DIR", default=None, help="Output directory (default: stdout)")
     args = parser.parse_args()
 
-    if not 1 <= args.id <= 100:
-        print(f"error: -id must be between 1 and 100, got {args.id}", file=sys.stderr)
+    if not 1 <= args.id <= 128:
+        print(f"error: -id must be between 1 and 128, got {args.id}", file=sys.stderr)
         sys.exit(1)
 
     files_dir = Path(args.indir)
