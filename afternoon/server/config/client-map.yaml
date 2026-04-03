@@ -7,608 +7,607 @@
   client_map_token: "not set (ipv6)"
 
 10.0.0.0/24:
-  client_map_token: "fast green webserver"
+  client_map_token: "fast ipv4 webserver"
 
 2001:db8::/48:
-  client_map_token: "fast green webserver"
+  client_map_token: "fast ipv6 webserver"
 
 10.0.1.0/24:
-  client_map_token: "swift grey pirate"
+  client_map_token: "swift grey castle"
 
 2001:db8:1::/48:
-  client_map_token: "swift grey pirate"
+  client_map_token: "swift gold wizard"
 
 10.0.2.0/24:
   client_map_token: "sharp red rocket"
 
 2001:db8:2::/48:
-  client_map_token: "sharp red rocket"
+  client_map_token: "fast grey rocket"
 
 10.0.3.0/24:
   client_map_token: "brave lime falcon"
 
 2001:db8:3::/48:
-  client_map_token: "brave lime falcon"
+  client_map_token: "fast lime forest"
 
 10.0.4.0/24:
   client_map_token: "grand green bridge"
 
 2001:db8:4::/48:
-  client_map_token: "grand green bridge"
+  client_map_token: "gnarly green castle"
 
 10.0.5.0/24:
   client_map_token: "big gold forest"
 
 2001:db8:5::/48:
-  client_map_token: "big gold forest"
+  client_map_token: "sharp green island"
 
 10.0.6.0/24:
   client_map_token: "round cyan forest"
 
 2001:db8:6::/48:
-  client_map_token: "round cyan forest"
+  client_map_token: "sharp gold castle"
 
 10.0.7.0/24:
   client_map_token: "big cyan falcon"
 
 2001:db8:7::/48:
-  client_map_token: "big cyan falcon"
+  client_map_token: "gnarly grey wizard"
 
 10.0.8.0/24:
   client_map_token: "swift teal castle"
 
 2001:db8:8::/48:
-  client_map_token: "swift teal castle"
+  client_map_token: "sharp gold castle"
 
 10.0.9.0/24:
   client_map_token: "tiny teal island"
 
 2001:db8:9::/48:
-  client_map_token: "tiny teal island"
+  client_map_token: "magic gold island"
 
 10.0.10.0/24:
   client_map_token: "sharp green forest"
 
 2001:db8:a::/48:
-  client_map_token: "sharp green forest"
+  client_map_token: "sharp blue bridge"
 
 10.0.11.0/24:
   client_map_token: "gnarly cyan island"
 
 2001:db8:b::/48:
-  client_map_token: "gnarly cyan island"
+  client_map_token: "gnarly green castle"
 
 10.0.12.0/24:
   client_map_token: "brave red jaguar"
 
 2001:db8:c::/48:
-  client_map_token: "brave red jaguar"
+  client_map_token: "tiny dark island"
 
 10.0.13.0/24:
   client_map_token: "round blue wizard"
 
 2001:db8:d::/48:
-  client_map_token: "round blue wizard"
+  client_map_token: "fast cyan falcon"
 
 10.0.14.0/24:
   client_map_token: "thick blue falcon"
 
 2001:db8:e::/48:
-  client_map_token: "thick blue falcon"
+  client_map_token: "round red falcon"
 
 10.0.15.0/24:
   client_map_token: "thick cyan bridge"
 
 2001:db8:f::/48:
-  client_map_token: "thick cyan bridge"
+  client_map_token: "fast red castle"
 
 10.0.16.0/24:
   client_map_token: "sharp red dragon"
 
 2001:db8:10::/48:
-  client_map_token: "sharp red dragon"
+  client_map_token: "fast gold bridge"
 
 10.0.17.0/24:
   client_map_token: "swift pink castle"
 
 2001:db8:11::/48:
-  client_map_token: "swift pink castle"
+  client_map_token: "round red castle"
 
 10.0.18.0/24:
   client_map_token: "big dark jaguar"
 
 2001:db8:12::/48:
-  client_map_token: "big dark jaguar"
+  client_map_token: "fast gold rocket"
 
 10.0.19.0/24:
   client_map_token: "swift gold bridge"
 
 2001:db8:13::/48:
-  client_map_token: "swift gold bridge"
+  client_map_token: "thick lime forest"
 
 10.0.20.0/24:
-  client_map_token: "tiny gold pirate"
+  client_map_token: "tiny gold castle"
 
 2001:db8:14::/48:
-  client_map_token: "tiny gold pirate"
+  client_map_token: "big dark forest"
 
 10.0.21.0/24:
   client_map_token: "round teal castle"
 
 2001:db8:15::/48:
-  client_map_token: "round teal castle"
+  client_map_token: "swift cyan falcon"
 
 10.0.22.0/24:
   client_map_token: "swift lime castle"
 
 2001:db8:16::/48:
-  client_map_token: "swift lime castle"
+  client_map_token: "gnarly grey forest"
 
 10.0.23.0/24:
   client_map_token: "tiny teal castle"
 
 2001:db8:17::/48:
-  client_map_token: "tiny teal castle"
+  client_map_token: "big red forest"
 
 10.0.24.0/24:
   client_map_token: "round pink rocket"
 
 2001:db8:18::/48:
-  client_map_token: "round pink rocket"
+  client_map_token: "brave teal scientist"
 
 10.0.25.0/24:
   client_map_token: "thick green bridge"
 
 2001:db8:19::/48:
-  client_map_token: "thick green bridge"
+  client_map_token: "thick teal bridge"
 
 10.0.26.0/24:
-  client_map_token: "round grey pirate"
+  client_map_token: "round grey castle"
 
 2001:db8:1a::/48:
-  client_map_token: "round grey pirate"
+  client_map_token: "brave dark bridge"
 
 10.0.27.0/24:
   client_map_token: "thick blue island"
 
 2001:db8:1b::/48:
-  client_map_token: "thick blue island"
+  client_map_token: "fast blue falcon"
 
 10.0.28.0/24:
   client_map_token: "sharp teal island"
 
 2001:db8:1c::/48:
-  client_map_token: "sharp teal island"
+  client_map_token: "sharp teal jaguar"
 
 10.0.29.0/24:
   client_map_token: "tiny pink falcon"
 
 2001:db8:1d::/48:
-  client_map_token: "tiny pink falcon"
+  client_map_token: "thick teal jaguar"
 
 10.0.30.0/24:
   client_map_token: "swift grey castle"
 
 2001:db8:1e::/48:
-  client_map_token: "swift grey castle"
+  client_map_token: "swift dark castle"
 
 10.0.31.0/24:
   client_map_token: "thick gold castle"
 
 2001:db8:1f::/48:
-  client_map_token: "thick gold castle"
+  client_map_token: "swift cyan island"
 
 10.0.32.0/24:
   client_map_token: "grand dark castle"
 
 2001:db8:20::/48:
-  client_map_token: "grand dark castle"
+  client_map_token: "grand red castle"
 
 10.0.33.0/24:
   client_map_token: "swift lime rocket"
 
 2001:db8:21::/48:
-  client_map_token: "swift lime rocket"
+  client_map_token: "tiny grey forest"
 
 10.0.34.0/24:
-  client_map_token: "round lime pirate"
+  client_map_token: "round lime castle"
 
 2001:db8:22::/48:
-  client_map_token: "round lime pirate"
+  client_map_token: "gnarly teal island"
 
 10.0.35.0/24:
   client_map_token: "grand green island"
 
 2001:db8:23::/48:
-  client_map_token: "grand green island"
+  client_map_token: "grand gold dragon"
 
 10.0.36.0/24:
   client_map_token: "tiny pink jaguar"
 
 2001:db8:24::/48:
-  client_map_token: "tiny pink jaguar"
+  client_map_token: "gnarly blue castle"
 
 10.0.37.0/24:
-  client_map_token: "sharp lime pirate"
+  client_map_token: "sharp lime castle"
 
 2001:db8:25::/48:
-  client_map_token: "sharp lime pirate"
+  client_map_token: "round lime castle"
 
 10.0.38.0/24:
   client_map_token: "swift green castle"
 
 2001:db8:26::/48:
-  client_map_token: "swift green castle"
+  client_map_token: "brave pink forest"
 
 10.0.39.0/24:
   client_map_token: "big teal forest"
 
 2001:db8:27::/48:
-  client_map_token: "big teal forest"
+  client_map_token: "round red castle"
 
 10.0.40.0/24:
-  client_map_token: "round green pirate"
+  client_map_token: "round green castle"
 
 2001:db8:28::/48:
-  client_map_token: "round green pirate"
+  client_map_token: "brave blue castle"
 
 10.0.41.0/24:
-  client_map_token: "big teal pirate"
+  client_map_token: "big teal castle"
 
 2001:db8:29::/48:
-  client_map_token: "big teal pirate"
+  client_map_token: "thick green rocket"
 
 10.0.42.0/24:
   client_map_token: "magic pink island"
 
 2001:db8:2a::/48:
-  client_map_token: "magic pink island"
+  client_map_token: "round gold bridge"
 
 10.0.43.0/24:
   client_map_token: "swift grey bridge"
 
 2001:db8:2b::/48:
-  client_map_token: "swift grey bridge"
+  client_map_token: "brave cyan island"
 
 10.0.44.0/24:
   client_map_token: "gnarly cyan falcon"
 
 2001:db8:2c::/48:
-  client_map_token: "gnarly cyan falcon"
+  client_map_token: "big gold dragon"
 
 10.0.45.0/24:
-  client_map_token: "round pink pirate"
+  client_map_token: "round pink castle"
 
 2001:db8:2d::/48:
-  client_map_token: "round pink pirate"
+  client_map_token: "thick blue rocket"
 
 10.0.46.0/24:
   client_map_token: "swift cyan jaguar"
 
 2001:db8:2e::/48:
-  client_map_token: "swift cyan jaguar"
+  client_map_token: "gnarly red dragon"
 
 10.0.47.0/24:
   client_map_token: "gnarly grey island"
 
 2001:db8:2f::/48:
-  client_map_token: "gnarly grey island"
+  client_map_token: "magic pink bridge"
 
 10.0.48.0/24:
   client_map_token: "gnarly teal castle"
 
 2001:db8:30::/48:
-  client_map_token: "gnarly teal castle"
+  client_map_token: "sharp dark bridge"
 
 10.0.49.0/24:
   client_map_token: "swift dark dragon"
 
 2001:db8:31::/48:
-  client_map_token: "swift dark dragon"
+  client_map_token: "gnarly pink castle"
 
 10.0.50.0/24:
   client_map_token: "gnarly blue forest"
 
 2001:db8:32::/48:
-  client_map_token: "gnarly blue forest"
+  client_map_token: "swift teal castle"
 
 10.0.51.0/24:
   client_map_token: "round green wizard"
 
 2001:db8:33::/48:
-  client_map_token: "round green wizard"
+  client_map_token: "round grey falcon"
 
 10.0.52.0/24:
   client_map_token: "grand pink falcon"
 
 2001:db8:34::/48:
-  client_map_token: "grand pink falcon"
+  client_map_token: "fast grey jaguar"
 
 10.0.53.0/24:
   client_map_token: "big blue wizard"
 
 2001:db8:35::/48:
-  client_map_token: "big blue wizard"
+  client_map_token: "tiny red island"
 
 10.0.54.0/24:
   client_map_token: "gnarly cyan jaguar"
 
 2001:db8:36::/48:
-  client_map_token: "gnarly cyan jaguar"
+  client_map_token: "sharp pink falcon"
 
 10.0.55.0/24:
   client_map_token: "round blue island"
 
 2001:db8:37::/48:
-  client_map_token: "round blue island"
+  client_map_token: "thick cyan forest"
 
 10.0.56.0/24:
   client_map_token: "sharp cyan jaguar"
 
 2001:db8:38::/48:
-  client_map_token: "sharp cyan jaguar"
+  client_map_token: "gnarly gold forest"
 
 10.0.57.0/24:
-  client_map_token: "thick pink pirate"
+  client_map_token: "thick pink castle"
 
 2001:db8:39::/48:
-  client_map_token: "thick pink pirate"
+  client_map_token: "tiny gold dragon"
 
 10.0.58.0/24:
   client_map_token: "swift pink forest"
 
 2001:db8:3a::/48:
-  client_map_token: "swift pink forest"
+  client_map_token: "tiny grey castle"
 
 10.0.59.0/24:
   client_map_token: "magic green dragon"
 
 2001:db8:3b::/48:
-  client_map_token: "magic green dragon"
+  client_map_token: "gnarly dark jaguar"
 
 10.0.60.0/24:
-  client_map_token: "sharp cyan pirate"
+  client_map_token: "sharp cyan castle"
 
 2001:db8:3c::/48:
-  client_map_token: "sharp cyan pirate"
+  client_map_token: "grand gold island"
 
 10.0.61.0/24:
   client_map_token: "sharp cyan dragon"
 
 2001:db8:3d::/48:
-  client_map_token: "sharp cyan dragon"
+  client_map_token: "big lime dragon"
 
 10.0.62.0/24:
   client_map_token: "magic lime jaguar"
 
 2001:db8:3e::/48:
-  client_map_token: "magic lime jaguar"
+  client_map_token: "fast lime castle"
 
 10.0.63.0/24:
   client_map_token: "thick gold wizard"
 
 2001:db8:3f::/48:
-  client_map_token: "thick gold wizard"
+  client_map_token: "round grey dragon"
 
 10.0.64.0/24:
-  client_map_token: "tiny cyan pirate"
+  client_map_token: "tiny cyan castle"
 
 2001:db8:40::/48:
-  client_map_token: "tiny cyan pirate"
+  client_map_token: "brave gold rocket"
 
 10.0.65.0/24:
   client_map_token: "tiny pink island"
 
 2001:db8:41::/48:
-  client_map_token: "tiny pink island"
+  client_map_token: "gnarly pink falcon"
 
 10.0.66.0/24:
   client_map_token: "brave grey jaguar"
 
 2001:db8:42::/48:
-  client_map_token: "brave grey jaguar"
+  client_map_token: "thick gold jaguar"
 
 10.0.67.0/24:
   client_map_token: "tiny gold island"
 
 2001:db8:43::/48:
-  client_map_token: "tiny gold island"
+  client_map_token: "sharp red bridge"
 
 10.0.68.0/24:
-  client_map_token: "big blue pirate"
+  client_map_token: "big blue castle"
 
 2001:db8:44::/48:
-  client_map_token: "big blue pirate"
+  client_map_token: "tiny gold wizard"
 
 10.0.69.0/24:
   client_map_token: "magic red bridge"
 
 2001:db8:45::/48:
-  client_map_token: "magic red bridge"
+  client_map_token: "sharp pink castle"
 
 10.0.70.0/24:
   client_map_token: "big red dragon"
 
 2001:db8:46::/48:
-  client_map_token: "big red dragon"
+  client_map_token: "round pink island"
 
 10.0.71.0/24:
   client_map_token: "big gold wizard"
 
 2001:db8:47::/48:
-  client_map_token: "big gold wizard"
+  client_map_token: "round cyan wizard"
 
 10.0.72.0/24:
   client_map_token: "magic lime castle"
 
 2001:db8:48::/48:
-  client_map_token: "magic lime castle"
+  client_map_token: "thick pink falcon"
 
 10.0.73.0/24:
   client_map_token: "round lime forest"
 
 2001:db8:49::/48:
-  client_map_token: "round lime forest"
+  client_map_token: "swift teal dragon"
 
 10.0.74.0/24:
   client_map_token: "magic dark rocket"
 
 2001:db8:4a::/48:
-  client_map_token: "magic dark rocket"
+  client_map_token: "brave grey wizard"
 
 10.0.75.0/24:
-  client_map_token: "sharp red pirate"
+  client_map_token: "sharp red castle"
 
 2001:db8:4b::/48:
-  client_map_token: "sharp red pirate"
+  client_map_token: "sharp cyan bridge"
 
 10.0.76.0/24:
-  client_map_token: "brave lime pirate"
+  client_map_token: "brave lime castle"
 
 2001:db8:4c::/48:
-  client_map_token: "brave lime pirate"
+  client_map_token: "fast green forest"
 
 10.0.77.0/24:
   client_map_token: "swift blue forest"
 
 2001:db8:4d::/48:
-  client_map_token: "swift blue forest"
+  client_map_token: "round red bridge"
 
 10.0.78.0/24:
   client_map_token: "brave lime dragon"
 
 2001:db8:4e::/48:
-  client_map_token: "brave lime dragon"
+  client_map_token: "big grey forest"
 
 10.0.79.0/24:
-  client_map_token: "big grey pirate"
+  client_map_token: "big grey castle"
 
 2001:db8:4f::/48:
-  client_map_token: "big grey pirate"
+  client_map_token: "sharp dark jaguar"
 
 10.0.80.0/24:
   client_map_token: "grand blue dragon"
 
 2001:db8:50::/48:
-  client_map_token: "grand blue dragon"
+  client_map_token: "grand blue forest"
 
 10.0.81.0/24:
   client_map_token: "swift lime bridge"
 
 2001:db8:51::/48:
-  client_map_token: "swift lime bridge"
+  client_map_token: "tiny red rocket"
 
 10.0.82.0/24:
   client_map_token: "sharp red wizard"
 
 2001:db8:52::/48:
-  client_map_token: "sharp red wizard"
+  client_map_token: "swift cyan rocket"
 
 10.0.83.0/24:
   client_map_token: "gnarly grey rocket"
 
 2001:db8:53::/48:
-  client_map_token: "gnarly grey rocket"
+  client_map_token: "big blue falcon"
 
 10.0.84.0/24:
   client_map_token: "brave dark bridge"
 
 2001:db8:54::/48:
-  client_map_token: "brave dark bridge"
+  client_map_token: "swift dark island"
 
 10.0.85.0/24:
   client_map_token: "magic red castle"
 
 2001:db8:55::/48:
-  client_map_token: "magic red castle"
+  client_map_token: "swift grey falcon"
 
 10.0.86.0/24:
   client_map_token: "swift pink falcon"
 
 2001:db8:56::/48:
-  client_map_token: "swift pink falcon"
+  client_map_token: "sharp grey jaguar"
 
 10.0.87.0/24:
   client_map_token: "grand red jaguar"
 
 2001:db8:57::/48:
-  client_map_token: "grand red jaguar"
+  client_map_token: "big gold castle"
 
 10.0.88.0/24:
   client_map_token: "magic lime forest"
 
 2001:db8:58::/48:
-  client_map_token: "magic lime forest"
+  client_map_token: "brave dark island"
 
 10.0.89.0/24:
   client_map_token: "sharp gold wizard"
 
 2001:db8:59::/48:
-  client_map_token: "sharp gold wizard"
+  client_map_token: "thick grey rocket"
 
 10.0.90.0/24:
   client_map_token: "big green island"
 
 2001:db8:5a::/48:
-  client_map_token: "big green island"
+  client_map_token: "gnarly blue castle"
 
 10.0.91.0/24:
   client_map_token: "thick lime island"
 
 2001:db8:5b::/48:
-  client_map_token: "thick lime island"
+  client_map_token: "gnarly lime wizard"
 
 10.0.92.0/24:
   client_map_token: "magic blue castle"
 
 2001:db8:5c::/48:
-  client_map_token: "magic blue castle"
+  client_map_token: "fast blue forest"
 
 10.0.93.0/24:
   client_map_token: "round green island"
 
 2001:db8:5d::/48:
-  client_map_token: "round green island"
+  client_map_token: "sharp dark wizard"
 
 10.0.94.0/24:
   client_map_token: "sharp green wizard"
 
 2001:db8:5e::/48:
-  client_map_token: "sharp green wizard"
+  client_map_token: "brave dark castle"
 
 10.0.95.0/24:
   client_map_token: "big gold island"
 
 2001:db8:5f::/48:
-  client_map_token: "big gold island"
+  client_map_token: "fast red rocket"
 
 10.0.96.0/24:
   client_map_token: "grand green wizard"
 
 2001:db8:60::/48:
-  client_map_token: "grand green wizard"
+  client_map_token: "round dark castle"
 
 10.0.97.0/24:
   client_map_token: "tiny lime wizard"
 
 2001:db8:61::/48:
-  client_map_token: "tiny lime wizard"
+  client_map_token: "fast teal rocket"
 
 10.0.98.0/24:
   client_map_token: "thick red rocket"
 
 2001:db8:62::/48:
-  client_map_token: "thick red rocket"
+  client_map_token: "tiny green falcon"
 
 10.0.99.0/24:
   client_map_token: "magic lime wizard"
 
 2001:db8:63::/48:
-  client_map_token: "magic lime wizard"
+  client_map_token: "fast pink castle"
 
 10.0.100.0/24:
   client_map_token: "brave dark wizard"
 
 2001:db8:64::/48:
-  client_map_token: "brave dark wizard"
-
+  client_map_token: "thick teal bridge"
