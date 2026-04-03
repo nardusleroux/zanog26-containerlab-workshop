@@ -1,3 +1,5 @@
+router id 10.0.{{ id }}.1;
+
 protocol static static4 {
   ipv4 { export all; };
   route 10.0.{{ id }}.0/24 unreachable;
