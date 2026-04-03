@@ -88,8 +88,10 @@ def main():
         html = markdown.markdown(rendered, extensions=["tables", "fenced_code"])
         html = highlight_code_blocks(html)
         css = weasyprint.CSS(string="@page { margin: 1cm; } body { font-size: 11px; } :not(pre) > code { color: darkgreen; } pre code { color: darkred; }")
-        pdf_path = out_path.with_name(f"{out_path.stem}-p{args.id}.pdf")
-        weasyprint.HTML(string=html, base_url=str(out_path)).write_pdf(pdf_path, stylesheets=[css])
+        docs_dir = Path(args.outdir) / "docs"
+        docs_dir.mkdir(parents=True, exist_ok=True)
+        pdf_path = docs_dir / f"HOWTO-p{args.id}.pdf"
+        weasyprint.HTML(string=html, base_url=str(docs_dir)).write_pdf(pdf_path, stylesheets=[css])
 
 
 if __name__ == "__main__":

@@ -71,17 +71,34 @@ The participants each get their own lab config (and tailored HOWTO) based on the
 can generate these as follows:
 
 ```
+sudo apt install libpango-1.0-0 libpangoft2-1.0-0 libpangocairo-1.0-0 \
+                 libgdk-pixbuf-2.0-0 libcairo2 libffi-dev
+pip install --break-system-packages markdown jinja2 weasyprint
+
 cd afternoon/participant/
 for i in `seq 1 64`; do \
-  ./generate -id $i -indir files-start -outdir containerlab-p$i/ \
+  ./generate -id $i -indir files-start -outdir p$i/; \
 done
 ```
 
 You can now rsync these to the participants' homedir:
 ```
 cd afternoon/participant/
-for i in `seq 1 64`; do \
-  sudo rsync -avug containerlab-p$i/ /home/zanog$i/containerlab-p$1/
+for i in `seq 1 64`; do 
+  if ! id "zanog$i" &>/dev/null; then
+    sudo useradd -m -s /bin/bash "zanog$i"
+  fi
+  if ! id "zanog$i" | grep -q 'clab_admins'; then
+    sudo usermod -aG clab_admins "zanog$i"
+  fi
+  if ! id "zanog$i" | grep -q 'docker'; then
+    sudo usermod -aG docker "zanog$i"
+  fi
+  PASSWORD=$(grep 'Password' p$i/HOWTO.md | cut -f2 -d'`')
+  echo "zanog$i:$PASSWORD" | sudo chpasswd
+  sudo rsync -avg p$i/ /home/zanog$i/containerlab-p$i/
+  sudo chown -R zanog$i:zanog$i /home/zanog$i/
+  sudo chmod -R o-rwx /home/zanog$i/
 done
 ```
 
