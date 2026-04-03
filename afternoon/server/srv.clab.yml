@@ -1,6 +1,11 @@
 name: "srv"
 prefix: "zanog"
 
+mgmt:
+  network: clab-mgmt
+  ipv4-subnet: 172.20.0.0/22
+  ipv6-subnet: 3ff1:172:8298::/64
+
 topology:
   kinds:
     fdio_vpp:
