@@ -45,10 +45,45 @@ Participants will receive:
 *   IPv4: `10.0.ID.0/24` and IPv6: `2001:db8:ID_HEX::/48`
 
 Participants will build up their LAB one step at a time:
+1.  Starting the participant's containerlab
 1.  `vpp2 <-> client` for IPv4 and IPv6
 1.  `vpp2 <-> vpp1` transit network for IPv4 and IPv6
-1.  `vpp2 <-> vpp1` OSPF and OSPFv3
+1.  `vpp2` OSPF and OSPFv3
+1.  `vpp1` OSPF and OSPFv3
 1.  `vpp1 <-> Shared LAN`
 1.  `vpp1 <-> server:vpp1` eBGP
 1.   End to end test from `client` all the way to `server:web` using `curl(1)` for IPv6 and IPv4
 
+### Building
+
+The server needs to have a pre-configured bridge called `vpplab` with an MTU of 9216 and no
+link-local address. The server can run as-is, with no additional configuration:
+
+```
+sudo ip link add vpplab type bridge
+sudo ip link set vpplab mtu 9216 up
+sudo sysctl -w net.ipv6.conf.vpplab.disable_ipv6=1
+cd afternoon/server/
+clab deploy
+```
+
+The participants each get their own lab config (and tailored HOWTO) based on their unique ID. You
+can generate these as follows:
+
+```
+cd afternoon/participant/
+for i in `seq 1 64`; do \
+  ./generate -id $i -indir files-start -outdir containerlab-p$i/ \
+done
+```
+
+You can now rsync these to the participants' homedir:
+```
+cd afternoon/participant/
+for i in `seq 1 64`; do \
+  sudo rsync -avug containerlab-p$i/ /home/zanog$i/containerlab-p$1/
+done
+```
+
+Print out or distribute `containerlab-p$i/HOWTO-p$i.pdf` to each participant. Those PDFs are
+tailored to contain the correct instructions, IP addresses, ASNs, etc for each individual lab.
