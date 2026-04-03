@@ -611,3 +611,171 @@
 
 2001:db8:64::/48:
   client_map_token: "thick teal bridge"
+
+10.0.101.0/24:
+  client_map_token: "brave gold castle"
+
+2001:db8:65::/48:
+  client_map_token: "magic grey dragon"
+
+10.0.102.0/24:
+  client_map_token: "grand cyan island"
+
+2001:db8:66::/48:
+  client_map_token: "thick dark wizard"
+
+10.0.103.0/24:
+  client_map_token: "fast dark bridge"
+
+2001:db8:67::/48:
+  client_map_token: "tiny blue castle"
+
+10.0.104.0/24:
+  client_map_token: "swift red island"
+
+2001:db8:68::/48:
+  client_map_token: "gnarly red castle"
+
+10.0.105.0/24:
+  client_map_token: "round gold wizard"
+
+2001:db8:69::/48:
+  client_map_token: "sharp lime dragon"
+
+10.0.106.0/24:
+  client_map_token: "magic teal castle"
+
+2001:db8:6a::/48:
+  client_map_token: "brave green rocket"
+
+10.0.107.0/24:
+  client_map_token: "thick red island"
+
+2001:db8:6b::/48:
+  client_map_token: "big cyan island"
+
+10.0.108.0/24:
+  client_map_token: "grand teal bridge"
+
+2001:db8:6c::/48:
+  client_map_token: "swift gold castle"
+
+10.0.109.0/24:
+  client_map_token: "tiny green castle"
+
+2001:db8:6d::/48:
+  client_map_token: "round dark wizard"
+
+10.0.110.0/24:
+  client_map_token: "gnarly gold castle"
+
+2001:db8:6e::/48:
+  client_map_token: "fast dark forest"
+
+10.0.111.0/24:
+  client_map_token: "sharp blue forest"
+
+2001:db8:6f::/48:
+  client_map_token: "swift lime forest"
+
+10.0.112.0/24:
+  client_map_token: "magic cyan wizard"
+
+2001:db8:70::/48:
+  client_map_token: "brave teal dragon"
+
+10.0.113.0/24:
+  client_map_token: "grand lime bridge"
+
+2001:db8:71::/48:
+  client_map_token: "tiny dark wizard"
+
+10.0.114.0/24:
+  client_map_token: "fast grey bridge"
+
+2001:db8:72::/48:
+  client_map_token: "big teal dragon"
+
+10.0.115.0/24:
+  client_map_token: "magic dark castle"
+
+2001:db8:73::/48:
+  client_map_token: "round blue castle"
+
+10.0.116.0/24:
+  client_map_token: "gnarly teal bridge"
+
+2001:db8:74::/48:
+  client_map_token: "thick green island"
+
+10.0.117.0/24:
+  client_map_token: "swift dark forest"
+
+2001:db8:75::/48:
+  client_map_token: "sharp grey dragon"
+
+10.0.118.0/24:
+  client_map_token: "brave gold bridge"
+
+2001:db8:76::/48:
+  client_map_token: "tiny teal wizard"
+
+10.0.119.0/24:
+  client_map_token: "grand grey forest"
+
+2001:db8:77::/48:
+  client_map_token: "fast blue island"
+
+10.0.120.0/24:
+  client_map_token: "thick dark forest"
+
+2001:db8:78::/48:
+  client_map_token: "gnarly red island"
+
+10.0.121.0/24:
+  client_map_token: "round teal bridge"
+
+2001:db8:79::/48:
+  client_map_token: "fast teal falcon"
+
+10.0.122.0/24:
+  client_map_token: "swift red falcon"
+
+2001:db8:7a::/48:
+  client_map_token: "sharp lime forest"
+
+10.0.123.0/24:
+  client_map_token: "magic green bridge"
+
+2001:db8:7b::/48:
+  client_map_token: "big dark dragon"
+
+10.0.124.0/24:
+  client_map_token: "gnarly lime castle"
+
+2001:db8:7c::/48:
+  client_map_token: "round grey island"
+
+10.0.125.0/24:
+  client_map_token: "brave red dragon"
+
+2001:db8:7d::/48:
+  client_map_token: "thick dark bridge"
+
+10.0.126.0/24:
+  client_map_token: "tiny dark dragon"
+
+2001:db8:7e::/48:
+  client_map_token: "swift green forest"
+
+10.0.127.0/24:
+  client_map_token: "sharp blue wizard"
+
+2001:db8:7f::/48:
+  client_map_token: "grand lime forest"
+
+10.0.128.0/24:
+  client_map_token: "magic grey castle"
+
+2001:db8:80::/48:
+  client_map_token: "brave green island"

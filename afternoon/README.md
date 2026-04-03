@@ -76,15 +76,15 @@ sudo apt install libpango-1.0-0 libpangoft2-1.0-0 libpangocairo-1.0-0 \
 pip install --break-system-packages markdown jinja2 weasyprint
 
 cd afternoon/participant/
-for i in `seq 1 64`; do \
-  ./generate -id $i -indir files-start -outdir p$i/; \
+for i in `seq 1 128`; do
+  ./generate -id $i -indir files-start -outdir p$i/
 done
 ```
 
 You can now rsync these to the participants' homedir:
 ```
 cd afternoon/participant/
-for i in `seq 1 64`; do 
+for i in `seq 1 128`; do
   if ! id "zanog$i" &>/dev/null; then
     sudo useradd -m -s /bin/bash "zanog$i"
   fi
