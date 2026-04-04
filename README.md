@@ -11,6 +11,7 @@ At the end of each activity, a solution proposal is provided. This allows you to
 ## 1. Containerlab installation
 
 ### Task 1.1 Install Containerlab
+
 First order of business is to get [Containerlab installed](https://containerlab.dev/install/). Containerlab requires the following pre-requisites:
 * A Linux user with sudo priviledges
 * A working Docker engine installation
@@ -100,14 +101,13 @@ A [topology definition deep-dive document](https://containerlab.dev/manual/topo-
 
 Containerlab supports [over 50 different types of Network OSes](https://containerlab.dev/manual/kinds/) that can be ran inside a topology. However, most commercial NOSes can only be downloaded with an active account for a given vendor's website or download portal.
 
-In this workshop, we will use two freely downloadable NOSes that do not require any registration:
+In this workshop, we will use a freely downloadable NOS that do not require any registration:
 
-- [FD.io VPP](https://fd.io/)
 - [Nokia SR Linux](https://learn.srlinux.dev/)
 
 To get started, we will create a simple topology called `zanog26-workshop` consisting of 2 nodes with a single link in between them.
 
-`leaf1` will be an SR Linux node, running SR Linux 25.10, using the container image `ghcr.io/nokia/srlinux:25.10`, and `leaf2` will be a VPP container, running `git.ipng.ch/ipng/vpp-containerlab:v25.10.0`. To make things simple, we will use the first available data-plane interface for both nodes: in case of SR Linux, this is `ethernet-1/1`, and `eth1` for VPP.
+`leaf1` and `leaf2` will be an SR Linux nodes, running SR Linux 25.10, using the container image `ghcr.io/nokia/srlinux:25.10`. To make things simple, we will use the first available data-plane interface for both nodes. In the case of SR Linux, this is `ethernet-1/1`, and connect the two nodes to one another.
 
 ![Topology](images/2.topology.png)
 
@@ -127,11 +127,11 @@ topology:
       kind: nokia_srlinux
       image: ghcr.io/nokia/srlinux:25.10
     leaf2:
-      kind: linux
-      image: git.ipng.ch/ipng/vpp-containerlab:v25.10.0
+      kind: nokia_srlinux
+      image: ghcr.io/nokia/srlinux:25.10
 
   links:
-    - endpoints: ["leaf1:ethernet-1/1", "leaf2:eth1"]
+    - endpoints: ["leaf1:ethernet-1/1", "leaf2:ethernet-1/1"]
 ```
 
 </details>
