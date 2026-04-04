@@ -107,7 +107,7 @@ In this workshop, we will use two freely downloadable NOSes that do not require 
 
 To get started, we will create a simple topology called `zanog26-workshop` consisting of 2 nodes with a single link in between them.
 
-`leaf1` will be an SR Linux node, running SR Linux 25.10, using the container image `ghcr.io/nokia/srlinux:25.10`, and `leaf2` will be a Linux container, running `alpine:latest`. To make things simple, we will use the first available data-plane interface for both nodes: in case of SR Linux, this is `ethernet-1/1`, and `eth1` for Linux.
+`leaf1` will be an SR Linux node, running SR Linux 25.10, using the container image `ghcr.io/nokia/srlinux:25.10`, and `leaf2` will be a VPP container, running `git.ipng.ch/ipng/vpp-containerlab:v25.10.0`. To make things simple, we will use the first available data-plane interface for both nodes: in case of SR Linux, this is `ethernet-1/1`, and `eth1` for VPP.
 
 ![Topology](images/2.topology.png)
 
@@ -128,7 +128,7 @@ topology:
       image: ghcr.io/nokia/srlinux:25.10
     leaf2:
       kind: linux
-      image: alpine:latest
+      image: git.ipng.ch/ipng/vpp-containerlab:v25.10.0
 
   links:
     - endpoints: ["leaf1:ethernet-1/1", "leaf2:eth1"]
@@ -139,7 +139,7 @@ topology:
 **What did we learn ?**
 - How to define your own topology.
 
-## 3. Extensing your Containerlab Topology
+## 3. Extending your Containerlab Topology
 
 TODO(Nardus)
 
