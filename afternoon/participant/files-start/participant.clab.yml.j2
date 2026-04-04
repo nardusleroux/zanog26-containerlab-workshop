@@ -23,6 +23,8 @@ topology:
       kind: fdio_vpp
     client:
       kind: linux
+      env:
+        BASH_ENV: /root/.bashrc
       exec:
         - ip link set address 00:c1:ab:{{ '%x' % id }}:00:01 mtu 1500 dev eth1
         - ip addr add 10.0.{{ id }}.66/28 dev eth1
@@ -31,6 +33,7 @@ topology:
         - ip addr add 2001:db8:{{ '%x' % id }}:100::2/64 dev eth1
         - ip route add 2001:db8::/32 via 2001:db8:{{ '%x' % id }}:100::1
         - apk add traceroute
+        - sh -c 'printf "\nalias traceroute=\"traceroute -z20\"\nalias traceroute6=\"traceroute6 -z20\"\n" >> /root/.bashrc'
 
   links:
     - endpoints: ["vpplab:p{{ id }}-v1-e3", "vpp1:eth1"]
