@@ -1,9 +1,0 @@
-protocol static static4 {
-  ipv4 { export all; };
-  route 10.0.{{ id }}.0/24 unreachable;
-}
-
-protocol static static6 {
-  ipv6 { export all; };
-  route 2001:db8:{{ '%x' % id }}::/48 unreachable;
-}
