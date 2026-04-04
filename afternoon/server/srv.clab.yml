@@ -9,7 +9,7 @@ mgmt:
 topology:
   kinds:
     fdio_vpp:
-      image: git.ipng.ch/ipng/vpp-containerlab:latest
+      image: git.ipng.ch/ipng/vpp-containerlab:stable
       startup-config: config/__clabNodeName__/vppcfg.yaml
       binds:
         - config/__clabNodeName__/bird-local.conf:/config/bird/bird-local.conf:rw
