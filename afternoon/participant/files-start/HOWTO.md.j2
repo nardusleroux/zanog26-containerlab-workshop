@@ -94,7 +94,7 @@ the red circle in the diagram above.
 For this subnet between `client` and `vpp2`, we will be using:
 
 *    IPv4: `10.0.{{id}}.64/28` where `vpp2` is `.65` and `client` is already `.66`
-*    IPv6: `2001:db8:{{ '%x' % id }}:100::/64` where `vpp2` is `::1` and `client` is already `::2` ]
+*    IPv6: `2001:db8:{{ '%x' % id }}:100::/64` where `vpp2` is `::1` and `client` is already `::2`
 
 If you've edited the file correctly, it should look like this:
 
@@ -202,7 +202,7 @@ root@vpp1:/# vppcfg apply
 ```
 
 Now that you've configured both sides of this link between `vpp2` and `vpp1`, you should be able to
-ping both with both IPv4 and IPv6:
+ping `vpp2` from `vpp1` with both IPv4 and IPv6:
 
 ```
 root@vpp1:/# ping 10.0.{{id}}.17
@@ -262,9 +262,8 @@ device1    Device     ---        up     2026-04-03 19:17:31
 direct1    Direct     ---        up     2026-04-03 19:17:31  
 kernel4    Kernel     master4    up     2026-04-03 19:17:31  
 kernel6    Kernel     master6    up     2026-04-03 19:17:31  
-bfd1       BFD        ---        up     2026-04-03 19:17:31  
-ospf4      OSPF       master4    up     2026-04-03 19:17:31  Alone
-ospf6      OSPF       master6    up     2026-04-03 19:17:31  Alone
+>>ospf4      OSPF       master4    up     2026-04-03 19:17:31  Alone
+>>ospf6      OSPF       master6    up     2026-04-03 19:17:31  Alone
 ```
 
 It's OK that the router is **Alone**, this is because the other router `vpp1` hasn't been configured
@@ -288,10 +287,9 @@ loopbacks:
 >>    addresses: [ 10.0.{{ id }}.1/32, 2001:db8:{{ '%x' % id }}::1/128 ]
 ```
 After you've added the addresses marked in green above to the `loop0` interface, you can check the
-configuration with `vppcfg plan` and then commit it with `vppcfg apply`.
-
-Next, you will edit the Bird2 configuration file, in exactly the same way as the other router in the
-previous step, except on `vpp1` you'll be adding `eth2`:
+configuration with `vppcfg plan` and then commit it with `vppcfg apply`. Next, you will edit the
+Bird2 configuration file, in exactly the same way as the other router in the previous step, except
+on `vpp1` you'll be adding `eth2`:
 
 ```
 root@vpp1:/# nano /config/bird/bird-local.conf
@@ -323,9 +321,8 @@ device1    Device     ---        up     2026-04-03 19:17:31
 direct1    Direct     ---        up     2026-04-03 19:17:31  
 kernel4    Kernel     master4    up     2026-04-03 19:17:31  
 kernel6    Kernel     master6    up     2026-04-03 19:17:31  
-bfd1       BFD        ---        up     2026-04-03 19:17:31  
-ospf4      OSPF       master4    up     2026-04-03 19:17:31  Running
-ospf6      OSPF       master6    up     2026-04-03 19:17:31  Running
+>>ospf4      OSPF       master4    up     2026-04-03 19:17:31  Running
+>>ospf6      OSPF       master6    up     2026-04-03 19:17:31  Running
 ```
 
 If you've done Step4+Step5 correctly, the routers will have found each other and formed an OSPF
@@ -333,6 +330,7 @@ adjacency. They will be exchanging routing information from now on. You can chec
 
 ```
 root@vpp1:/# birdc show ospf neighbors
+root@vpp1:/# birdc show route all
 ```
 
 Once the routers have an OSPF adjacency, `vpp1` will be able to reach the `client` node via `vpp2`,
@@ -376,7 +374,7 @@ root@vpp1:/# vppcfg plan
 root@vpp1:/# vppcfg apply
 ```
 
-If all is well, you should now be able to reach the Teacher's VPP router:
+If all is well, you should now be able to reach the Teacher's `vpp1` router:
 
 ```
 root@vpp1:/# ping 192.0.2.254
@@ -393,7 +391,7 @@ IPv6 prefixes. You have been assigned the following prefixes for your lab:
 
 *    IPv4: `10.0.{{id}}.0/24`
 *    IPv6: `2001:db8:{{'%x' % id }}::/48`
-*    AS Number: {{ 65000 + id }}
+*    AS Number: `{{ 65000 + id }}`
 
 BGP announcements can only occur if the router has a route for these prefixes. However, until now
 you've configured only more-specifics (like the /32 or /128 on `loop0`). To address this and make
@@ -420,14 +418,14 @@ and that's to configure the BGP sessions to the Teacher's lab, by adding them to
 ```
 root@vpp1:/# nano /config/bird/bird-local.conf
 protocol bgp ebgp_ipv4 {
-    neighbor 192.0.2.254 as 65000;
     local 192.0.2.{{ id }} as {{ 65000 + id }};
+    neighbor 192.0.2.254 as 65000;
     ipv4 { import all; export all; };
 }
 
 protocol bgp ebgp_ipv6 {
-    neighbor 2001:db8:8298::fe as 65000;
     local 2001:db8:8298::{{ '%x' % id }} as {{ 65000 + id }};
+    neighbor 2001:db8:8298::fe as 65000;
     ipv6 { import all; export all; };
 }
 ```
@@ -445,14 +443,18 @@ kernel4    Kernel     master4    up     2026-04-03 19:17:31
 kernel6    Kernel     master6    up     2026-04-03 19:17:31  
 static4    Static     master4    up     2026-04-03 19:17:31  
 static6    Static     master6    up     2026-04-03 19:17:31  
-bfd1       BFD        ---        up     2026-04-03 19:17:31  
 ospf4      OSPF       master4    up     2026-04-03 19:17:31  Running
 ospf6      OSPF       master6    up     2026-04-03 19:17:31  Running
 >>ebgp_ipv4  BGP        ---        up     2026-04-03 19:17:39  Established   
 >>ebgp_ipv6  BGP        ---        up     2026-04-03 19:17:39  Established   
 ```
 
-If the sessions do not come up to **Established** state, don't worry. Ask a teacher or assistant for
+You can check to see the new routes your VPP router is learning via BGP, like so:
+```
+root@vpp1:/# birdc show route all
+```
+
+If the sessions do not come up to **Established** state, don't worry. Ask a Teacher or assistant for
 help. Getting BGP sessions can be tricky, but if you've followed these steps, you should see both
 sessions up and running.
 
@@ -461,9 +463,9 @@ sessions up and running.
 
 ![Step 8](Containerlab Step 8.svg)
 
-Your Containerlab is one of the ones on the right here. The teacher has also deployed a
+Your Containerlab is one of the ones on the right here. The Teacher has also deployed a
 containerlab, with a webserver in it. You can see it on the bottom left, with the red circle around
-it. It has a well known IPv4 and IPv6 address, which are announced by its own Teacher's `vpp1` node.
+it. It has a well known IPv4 and IPv6 address, which are announced by the Teacher's `vpp1` node.
 
 *    IPv4: `10.0.0.66`
 *    IPv6: `2001:db8:0:100::2`
