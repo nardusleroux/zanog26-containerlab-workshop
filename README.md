@@ -614,7 +614,7 @@ commit now
 
 save startup
 ```
-
+</details>
 
 ## Afternoon: End to End VPP Containerlab
 
