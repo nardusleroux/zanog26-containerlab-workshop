@@ -482,8 +482,8 @@ Traffic capture is an essential part of any lab and Containerlab provides multip
 
 Labs should be able to reflect real-world scenarios and Containerlab allows to set link impairment like delay, jitter, loss etc. This impairments are powered by `tools netem` command.
 Impairment can be done by:
-[Local link impairment](https://containerlab.dev/manual/vsc-extension/#link-impairments)
-[VSCode-Containerlab extension impairment](https://containerlab.dev/manual/vsc-extension/#link-impairments)
+* [Local link impairment](https://containerlab.dev/manual/vsc-extension/#link-impairments)
+* [VSCode-Containerlab extension impairment](https://containerlab.dev/manual/vsc-extension/#link-impairments)
 
 ## 6. Optional - Extending your topology
 
@@ -502,7 +502,41 @@ Once topology is expanded, deploy lab
 
 <details>
 <summary>Task 6.1 solution</summary>
+```
+name: zanog26-workshop
 
+topology:
+  nodes:
+    leaf1:
+      kind: nokia_srlinux
+      image: ghcr.io/nokia/srlinux:26.3
+
+    leaf2:
+      kind: nokia_srlinux
+      image: ghcr.io/nokia/srlinux:26.3
+
+
+    client1:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      exec:
+        - ip addr add 192.168.201.2/24 dev eth1
+        - ip route add 192.168.202.0/24 via 192.168.201.1
+        - ip link set eth1 up
+
+    client2:
+      kind: linux
+      image: ghcr.io/srl-labs/network-multitool:latest
+      exec:
+        - ip addr add 192.168.202.2/24 dev eth1
+        - ip route add 192.168.201.0/24 via 192.168.202.1
+        - ip link set eth1 up
+    
+  links:
+    - endpoints: ["leaf1:ethernet-1/1", "leaf2:ethernet-1/1"]
+    - endpoints: ["leaf1:ethernet-1/2", "client1:eth1"]
+    - endpoints: ["leaf2:ethernet-1/2", "client2:eth1"]
+```
 </details>
 
 #### Task 6.2 - Configure the expanded topology and validate connectivity
@@ -513,6 +547,7 @@ Verify from client1 that client2 can be reached.
 <summary>Task 6.2 solution - leaf1 configuration</summary>
 
 ```
+enter candidate
 set / interface ethernet-1/2 admin-state enable
 set / interface ethernet-1/2 subinterface 0 admin-state enable
 set / interface ethernet-1/2 subinterface 0 ipv4 address 192.168.201.1/24
@@ -537,6 +572,9 @@ set / network-instance default protocols bgp group ebgp
 set / network-instance default protocols bgp neighbor 10.0.0.2 admin-state enable
 set / network-instance default protocols bgp neighbor 10.0.0.2 peer-group ebgp
 set / network-instance default protocols bgp neighbor 10.0.0.2 peer-as 65002
+
+commit now
+save startup
 ```
 </details>
 
@@ -544,6 +582,8 @@ set / network-instance default protocols bgp neighbor 10.0.0.2 peer-as 65002
 <summary>Task 6.2 solution - leaf2 configuration</summary>
 
 ```
+enter candidate
+
 set / interface ethernet-1/2 admin-state enable
 set / interface ethernet-1/2 subinterface 0 admin-state enable
 set / interface ethernet-1/2 subinterface 0 ipv4 address 192.168.202.1/24
@@ -568,6 +608,10 @@ set / network-instance default protocols bgp group ebgp
 set / network-instance default protocols bgp neighbor 10.0.0.1 admin-state enable
 set / network-instance default protocols bgp neighbor 10.0.0.1 peer-group ebgp
 set / network-instance default protocols bgp neighbor 10.0.0.1 peer-as 65001
+
+commit now
+
+save startup
 ```
 
 
