@@ -502,7 +502,8 @@ Once topology is expanded, deploy lab
 
 <details>
 <summary>Task 6.1 solution</summary>
-```
+
+```yaml
 name: zanog26-workshop
 
 topology:
