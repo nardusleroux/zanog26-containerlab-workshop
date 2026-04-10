@@ -312,20 +312,20 @@ Links to relevant documentations:
 > 
 > ```shell
 > A:admin@leaf2# ping 10.0.0.1 network-instance default
-Using network instance default
-PING 10.0.0.1 (10.0.0.1) 56(84) bytes of data.
-64 bytes from 10.0.0.1: icmp_seq=1 ttl=64 time=54.5 ms
-64 bytes from 10.0.0.1: icmp_seq=2 ttl=64 time=2.89 ms
-64 bytes from 10.0.0.1: icmp_seq=3 ttl=64 time=2.84 ms
-64 bytes from 10.0.0.1: icmp_seq=4 ttl=64 time=3.11 ms
-^C
---- 10.0.0.1 ping statistics ---
-4 packets transmitted, 4 received, 0% packet loss, time 3004ms
-rtt min/avg/max/mdev = 2.841/15.824/54.451/22.301 ms
-
-
---{ running }--[  ]--
-A:admin@leaf2#
+> Using network instance default
+> PING 10.0.0.1 (10.0.0.1) 56(84) bytes of data.
+> 64 bytes from 10.0.0.1: icmp_seq=1 ttl=64 time=54.5 ms
+> 64 bytes from 10.0.0.1: icmp_seq=2 ttl=64 time=2.89 ms
+> 64 bytes from 10.0.0.1: icmp_seq=3 ttl=64 time=2.84 ms
+> 64 bytes from 10.0.0.1: icmp_seq=4 ttl=64 time=3.11 ms
+> ^C
+> --- 10.0.0.1 ping statistics ---
+> 4 packets transmitted, 4 received, 0% packet loss, time 3004ms
+> rtt min/avg/max/mdev = 2.841/15.824/54.451/22.301 ms
+>
+>
+> --{ running }--[  ]--
+> A:admin@leaf2#
 > ```
 > 
 > </details>
