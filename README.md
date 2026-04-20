@@ -32,7 +32,9 @@ This one liner will install Docker and Containerlab.
 > 
 > `usermod -aG clab_admins <insert your username here> && newgrp clab_admins`
 > 
-> and apply the new group membership to your terminal session (or log in and out from the SSH session).
+> and apply the new group membership to your terminal session by typing:
+> `newgrp docker`
+>  (or log in and out from the SSH session).
 
 The Containerlab installation can be tested by running `containerlab version`:
 ```
