@@ -76,9 +76,7 @@ sudo apt install libpango-1.0-0 libpangoft2-1.0-0 libpangocairo-1.0-0 \
 pip install --break-system-packages markdown jinja2 weasyprint
 
 cd afternoon/participant/
-for i in `seq 1 128`; do
-  ./generate -id $i -indir files-start -outdir p$i/
-done
+for i in `seq 1 128`; do ./generate -id $i -indir files-start -outdir p$i/ & done
 ```
 
 You can now rsync these to the participants' homedir:
@@ -96,6 +94,9 @@ for i in `seq 1 128`; do
   fi
   PASSWORD=$(grep 'Password' p$i/HOWTO.md | cut -f2 -d'`')
   echo "zanog$i:$PASSWORD" | sudo chpasswd
+done
+
+for i in `seq 1 128`; do
   sudo rsync -avg p$i/ /home/zanog$i/containerlab-p$i/
   sudo chown -R zanog$i:zanog$i /home/zanog$i/
   sudo chmod -R o-rwx /home/zanog$i/

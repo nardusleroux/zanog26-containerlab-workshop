@@ -136,7 +136,7 @@ root@vpp2:/# ip -br a
 lo               UNKNOWN        127.0.0.1/8 ::1/128 
 loop0            UP             fe80::dcad:ff:fe00:0/64 
 eth1             UNKNOWN        fe80::a8c1:abff:fe69:750d/64 
->>eth2             UNKNOWN        10.0.64.65/28 2001:db8:40:100::1/64 fe80::a8c1:abff:fe11:748f/64 
+>>eth2             UNKNOWN        10.0.{{id}}.65/28 2001:db8:{{'%x' % id}}:100::1/64 fe80::a8c1:abff:fe11:748f/64
 
 root@vpp2:/# ping 10.0.{{id}}.66
 root@vpp2:/# ping 2001:db8:{{'%x' % id}}:100::2
